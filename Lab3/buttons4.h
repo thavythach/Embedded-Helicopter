@@ -1,6 +1,5 @@
 #ifndef BUTTONS_H_
 #define BUTTONS_H_
-
 // *******************************************************
 // buttons4.h
 //
