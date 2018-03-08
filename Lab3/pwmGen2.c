@@ -41,7 +41,7 @@
 #define PWM_RATE_STEP_HZ   50
 #define PWM_RATE_MIN_HZ    50
 #define PWM_RATE_MAX_HZ    400
-#define PWM_FIXED_DUTY     67
+#define PWM_FIXED_DUTY     50
 #define PWM_DIVIDER_CODE   SYSCTL_PWMDIV_4
 #define PWM_DIVIDER        4
 
@@ -57,6 +57,10 @@
 #define PWM_MAIN_GPIO_CONFIG GPIO_PC5_M0PWM7
 #define PWM_MAIN_GPIO_PIN    GPIO_PIN_5
 
+/*******************************8
+ * global variables
+ ********************************/
+uint32_t dutyCycle = 50;
 /*******************************************
  *      Local prototypes
  *******************************************/
@@ -189,13 +193,26 @@ main (void)
         if ((checkButton (UP) == PUSHED) && (ui32Freq < PWM_RATE_MAX_HZ))
         {
     	    ui32Freq += PWM_RATE_STEP_HZ;
-    	    setPWM (ui32Freq, PWM_FIXED_DUTY);
+    	    setPWM (ui32Freq, dutyCycle);
         }
         if ((checkButton (DOWN) == PUSHED) && (ui32Freq > PWM_RATE_MIN_HZ))
         {
     	    ui32Freq -= PWM_RATE_STEP_HZ;
-    	    setPWM (ui32Freq, PWM_FIXED_DUTY);
+    	    setPWM (ui32Freq, dutyCycle);
         }
+
+        if (checkButton(RIGHT) == PUSHED) {
+            if (dutyCycle >= 95) dutyCycle = 5;
+            else dutyCycle += 5;
+            setPWM (ui32Freq, dutyCycle);
+        }
+
+        if (checkButton(LEFT) == PUSHED) {
+            if (dutyCycle <= 5) dutyCycle = 95;
+            else dutyCycle -= 5;
+            setPWM (ui32Freq, dutyCycle);
+        }
+
 
     }
 }

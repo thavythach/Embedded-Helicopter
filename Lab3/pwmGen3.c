@@ -23,6 +23,9 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/interrupt.h"
 #include "buttons4.h"
+#include "OrbitOLED/OrbitOLEDInterface.h"
+#include "utils/ustdlib.h"
+
 
 /**********************************************************
  * Generates a single PWM signal on Tiva board pin J4-05 =
@@ -41,7 +44,7 @@
 #define PWM_RATE_STEP_HZ   50
 #define PWM_RATE_MIN_HZ    50
 #define PWM_RATE_MAX_HZ    400
-#define PWM_FIXED_DUTY     67
+#define PWM_FIXED_DUTY     50
 #define PWM_DIVIDER_CODE   SYSCTL_PWMDIV_4
 #define PWM_DIVIDER        4
 
@@ -57,6 +60,10 @@
 #define PWM_MAIN_GPIO_CONFIG GPIO_PC5_M0PWM7
 #define PWM_MAIN_GPIO_PIN    GPIO_PIN_5
 
+/*******************************8
+ * global variables
+ ********************************/
+uint32_t dutyCycle = 50;
 /*******************************************
  *      Local prototypes
  *******************************************/
@@ -65,6 +72,7 @@ void initClocks (void);
 void initSysTick (void);
 void initialisePWM (void);
 void setPWM (uint32_t u32Freq, uint32_t u32Duty);
+
 
 
 /***********************************************************
@@ -154,6 +162,20 @@ setPWM (uint32_t ui32Freq, uint32_t ui32Duty)
         ui32Period * ui32Duty / 100);
 }
 
+void
+displayUpdate (char *str1, char *str2, uint8_t num, uint8_t charLine)
+{
+    char text_buffer[17];           //Display fits 16 characters wide.
+
+    // "Undraw" the previous contents of the line to be updated.
+    OLEDStringDraw ("                ", 0, charLine);
+    // Form a new string for the line.  The maximum width specified for the
+    //  number field ensures it is displayed right justified.
+    usnprintf(text_buffer, sizeof(text_buffer), "%s %s %3d", str1, str2, num);
+    // Update line on display.
+    OLEDStringDraw (text_buffer, 0, charLine);
+}
+
 
 int
 main (void)
@@ -167,6 +189,7 @@ main (void)
     SysCtlPeripheralReset (PWM_MAIN_PERIPH_PWM);  // Main Rotor PWM
     SysCtlPeripheralReset (UP_BUT_PERIPH);        // UP button GPIO
     SysCtlPeripheralReset (DOWN_BUT_PERIPH);      // DOWN button GPIO
+
 
     initButtons ();  // Initialises 4 pushbuttons (UP, DOWN, LEFT, RIGHT)
     initialisePWM ();
@@ -182,6 +205,21 @@ main (void)
     //
     // Loop forever, controlling the PWM frequency and
     // maintaining the the PWM duty cycle.
+
+    //initialise display
+    char duty[25] = "DC: ";
+    char freq[25] = "freq: ";
+    char stringF[4];
+    char stringDC[4];
+    char HZ[3] = "HZ";
+    char percent[2] = "%";
+    OLEDInitialise();
+    OLEDStringDraw(duty, 0, 0);
+    OLEDStringDraw(freq, 0, 1);
+    usnprintf (stringDC, sizeof(stringDC), "%3d(%s)", dutyCycle, percent);
+    OLEDStringDraw(stringDC, 8, 0);
+    usnprintf (stringF, sizeof(stringF), "%3d(%s)", ui32Freq, HZ);
+    OLEDStringDraw(stringF, 8, 1);
     while (1)
     {
         // Background task: Check for button pushes and control
@@ -189,13 +227,38 @@ main (void)
         if ((checkButton (UP) == PUSHED) && (ui32Freq < PWM_RATE_MAX_HZ))
         {
     	    ui32Freq += PWM_RATE_STEP_HZ;
-    	    setPWM (ui32Freq, PWM_FIXED_DUTY);
+    	    setPWM (ui32Freq, dutyCycle);
+    	    usnprintf (stringF, sizeof(stringF), "%3d(%s)", ui32Freq, HZ);
+    	    OLEDStringDraw(stringF, 8, 1);
+    	   // displayUpdate("freq", ": ", ui32Freq, 0);
         }
         if ((checkButton (DOWN) == PUSHED) && (ui32Freq > PWM_RATE_MIN_HZ))
         {
     	    ui32Freq -= PWM_RATE_STEP_HZ;
-    	    setPWM (ui32Freq, PWM_FIXED_DUTY);
+    	    setPWM (ui32Freq, dutyCycle);
+    	    usnprintf (stringF, sizeof(stringF), "%3d(%s)", ui32Freq, HZ);
+    	    OLEDStringDraw(stringF, 8, 1);
+    	 //   displayUpdate("frequency", ": ", ui32Freq, 0);
         }
+
+        if (checkButton(RIGHT) == PUSHED) {
+            if (dutyCycle >= 95) dutyCycle = 5;
+            else dutyCycle += 5;
+            setPWM (ui32Freq, dutyCycle);
+            usnprintf (stringDC, sizeof(stringDC), "%3d(%s)", dutyCycle, percent);
+            OLEDStringDraw(stringDC, 8, 0);
+        //    displayUpdate("duty ", "cycle: ", dutyCycle, 1);
+        }
+
+        if (checkButton(LEFT) == PUSHED) {
+            if (dutyCycle <= 5) dutyCycle = 95;
+            else dutyCycle -= 5;
+            setPWM (ui32Freq, dutyCycle);
+            usnprintf (stringDC, sizeof(stringDC), "%3d(%s)", dutyCycle, percent);
+            OLEDStringDraw(stringDC, 8, 0);
+      //      displayUpdate("duty ", "cycle: ", dutyCycle, 1);
+        }
+
 
     }
 }
