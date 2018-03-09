@@ -216,10 +216,12 @@ main (void)
     OLEDInitialise();
     OLEDStringDraw(duty, 0, 0);
     OLEDStringDraw(freq, 0, 1);
-    usnprintf (stringDC, sizeof(stringDC), "%3d(%s)", dutyCycle, percent);
+    usnprintf (stringDC, sizeof(stringDC), "%3d", dutyCycle);
     OLEDStringDraw(stringDC, 8, 0);
-    usnprintf (stringF, sizeof(stringF), "%3d(%s)", ui32Freq, HZ);
+    usnprintf (stringF, sizeof(stringF), "%3d", ui32Freq);
     OLEDStringDraw(stringF, 8, 1);
+    OLEDStringDraw(HZ, 12, 1);
+    OLEDStringDraw(percent, 12, 0);
     while (1)
     {
         // Background task: Check for button pushes and control
@@ -228,7 +230,7 @@ main (void)
         {
     	    ui32Freq += PWM_RATE_STEP_HZ;
     	    setPWM (ui32Freq, dutyCycle);
-    	    usnprintf (stringF, sizeof(stringF), "%3d(%s)", ui32Freq, HZ);
+    	    usnprintf (stringF, sizeof(stringF), "%3d", ui32Freq);
     	    OLEDStringDraw(stringF, 8, 1);
     	   // displayUpdate("freq", ": ", ui32Freq, 0);
         }
@@ -236,7 +238,7 @@ main (void)
         {
     	    ui32Freq -= PWM_RATE_STEP_HZ;
     	    setPWM (ui32Freq, dutyCycle);
-    	    usnprintf (stringF, sizeof(stringF), "%3d(%s)", ui32Freq, HZ);
+    	    usnprintf (stringF, sizeof(stringF), "%3d", ui32Freq);
     	    OLEDStringDraw(stringF, 8, 1);
     	 //   displayUpdate("frequency", ": ", ui32Freq, 0);
         }
@@ -245,7 +247,7 @@ main (void)
             if (dutyCycle >= 95) dutyCycle = 5;
             else dutyCycle += 5;
             setPWM (ui32Freq, dutyCycle);
-            usnprintf (stringDC, sizeof(stringDC), "%3d(%s)", dutyCycle, percent);
+            usnprintf (stringDC, sizeof(stringDC), "%3d", dutyCycle);
             OLEDStringDraw(stringDC, 8, 0);
         //    displayUpdate("duty ", "cycle: ", dutyCycle, 1);
         }
@@ -254,7 +256,7 @@ main (void)
             if (dutyCycle <= 5) dutyCycle = 95;
             else dutyCycle -= 5;
             setPWM (ui32Freq, dutyCycle);
-            usnprintf (stringDC, sizeof(stringDC), "%3d(%s)", dutyCycle, percent);
+            usnprintf (stringDC, sizeof(stringDC), "%3d", dutyCycle);
             OLEDStringDraw(stringDC, 8, 0);
       //      displayUpdate("duty ", "cycle: ", dutyCycle, 1);
         }
