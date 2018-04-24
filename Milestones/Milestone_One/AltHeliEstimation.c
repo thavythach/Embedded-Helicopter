@@ -29,17 +29,23 @@
 // Constants
 //*****************************************************************************
 #define BUF_SIZE 10
-#define SAMPLE_RATE_HZ 100
+#define SAMPLE_RATE_HZ 10
 #define sw1Pin GPIO_PIN_4
 #define UP_BUT_PERIPH  SYSCTL_PERIPH_GPIOE
 #define UP_BUT_PORT_BASE  GPIO_PORTE_BASE
 #define UP_BUT_PIN  GPIO_PIN_0
+#define CHANNEL_A_PIN
 
 //*****************************************************************************
 // Global variables
 //*****************************************************************************
 static circBuf_t g_inBuffer;		// Buffer of size BUF_SIZE integers (sample values)
 static uint32_t g_ulSampCnt;	// Counter for the interrupts
+
+//*****************************************************************************
+// Prototypes
+//*****************************************************************************
+void initGPIOInterrupts(void);
 
 //*****************************************************************************
 //
@@ -193,6 +199,39 @@ displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t 
     return mode;
 }
 
+/**
+ * Enable the GPIOB peripheral
+ */
+void initGPIOInterrupts(void){
+
+    // Enable the GPIOB peripheral
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
+
+    /**Wait for the GPIOB module to be ready**/
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOB)){
+    }
+
+    GPIOIntRegister(GPIO_PORTB_BASE, PortBIntHandler);
+
+    /**Initialize the GPIO pin configuration**/
+
+    // sets pin 0, 1 as in put, SW controlled.
+    GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+
+    // makes pins 0 and 1 rising edge triggered interrupts
+    GPIOIntTypeSet(GPIO_PORTB_BASE, GPIO_PIN_0 | GPIO_PIN_1, GPIO_RISING_EDGE);
+
+    // Enable the pin interrupts
+    GPIOIntEnable(GPIO_PORTB_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+}
+
+void PortBIntHandler(void){
+
+}
+
+
 
 int
 main(void)
@@ -205,6 +244,9 @@ main(void)
 	initADC ();
 	initDisplay ();
 	initCircBuf (&g_inBuffer, BUF_SIZE);
+
+	// Configuration for interrupts
+	initGPIOInterrupts();
 
 	// left button initial setup with hardware
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
@@ -240,12 +282,12 @@ main(void)
 		if (isInit == 10 || !GPIOPinRead(GPIO_PORTF_BASE, sw1Pin)) {
 		    initMeanVal = sum/10;
 		}
-
+		if(GPIOPinRead(GPIO_PORTB_BASE,  ))
 		// Calculate, display the rounded mean of the buffer contents, and returns mode.
 		newMode = displayMeanVal ((2 * sum + BUF_SIZE) / 2 / BUF_SIZE, g_ulSampCnt, initMeanVal, mode);
 		mode = newMode;
 
-		SysCtlDelay (SysCtlClockGet() / 24);  // Update display at ~ 2 Hz make it update faster change 6
+		SysCtlDelay (SysCtlClockGet() / 24);  // Update display at ~8hz
 		isInit += 1;
 	}
 }
