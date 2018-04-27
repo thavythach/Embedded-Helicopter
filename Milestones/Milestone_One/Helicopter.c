@@ -1,51 +1,20 @@
-//*****************************************************************************
-//
-// AltHeliEstimation.c - An Advanced interrupt driven program which operates with AIN9 to estimate the percentage of altitude range (0.8V).
-//
-// Author:  Thavy Thach, Gabriel Lake, Jed McDermott
-// Last modified:	19.3.2018
-// Adapted from: Adcdemo1.c
+/**
+ * @program Helicopter.c
+ * @description An Advanced interrupt driven program which operates with AIN9 to estimate the percentage of altitude range (0.8v)
+ * @author0 Thavy Thach
+ * @author1 Gabriel Lake
+ * @author2 Jed McDermott
+ * @last_modified 27/04/2018
+ */
 
+/**Libraries**/
+#include "Helicopter.h"
 
-//*****************************************************************************
-// Libraries
-//*****************************************************************************
-#include <stdint.h>
-#include <stdbool.h>
-#include "inc/hw_memmap.h"
-#include "inc/hw_types.h"
-#include "driverlib/adc.h"
-#include "driverlib/pwm.h"
-#include "driverlib/gpio.h"
-#include "driverlib/sysctl.h"
-#include "driverlib/systick.h"
-#include "driverlib/interrupt.h"
-#include "driverlib/debug.h"
-#include "utils/ustdlib.h"
-#include "circBufT.h"
-#include "OrbitOLED/OrbitOLEDInterface.h"
-
-//*****************************************************************************
-// Constants
-//*****************************************************************************
-#define BUF_SIZE 10
-#define SAMPLE_RATE_HZ 10
-#define sw1Pin GPIO_PIN_4
-#define UP_BUT_PERIPH  SYSCTL_PERIPH_GPIOE
-#define UP_BUT_PORT_BASE  GPIO_PORTE_BASE
-#define UP_BUT_PIN  GPIO_PIN_0
-#define CHANNEL_A_PIN
-
-//*****************************************************************************
-// Global variables
-//*****************************************************************************
+/** Global Variables **/
 static circBuf_t g_inBuffer;		// Buffer of size BUF_SIZE integers (sample values)
 static uint32_t g_ulSampCnt;	// Counter for the interrupts
-
-//*****************************************************************************
-// Prototypes
-//*****************************************************************************
-void initGPIOInterrupts(void);
+static int32_t yaw;
+static uint8_t state;
 
 //*****************************************************************************
 //
@@ -148,6 +117,51 @@ initDisplay (void)
     OLEDInitialise (); // intialise the Orbit OLED display
 }
 
+/**
+ * Enable the GPIOB peripheral
+ */
+void initGPIOInterrupts(void){
+
+    // Enable the GPIOB peripheral
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
+
+    /**Wait for the GPIOB module to be ready**/
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOB)){
+    }
+
+    GPIOIntRegister(GPIO_PORTB_BASE, yaw_calc);
+
+    /**Initialize the GPIO pin configuration**/
+
+    // sets pin 0, 1 as in put, SW controlled.
+    GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+
+    // makes pins 0 and 1 rising edge triggered interrupts
+    GPIOIntTypeSet(GPIO_PORTB_BASE, GPIO_PIN_0 | GPIO_PIN_1, GPIO_RISING_EDGE);
+
+    // Enable the pin interrupts
+    GPIOIntEnable(GPIO_PORTB_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+
+}
+
+/**
+ * Enable Up & left Buttons
+ */
+void initButtonConfiguration(void){
+    // left button initial setup with hardware
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+    GPIOPadConfigSet(GPIO_PORTF_BASE, sw1Pin, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD_WPU);
+    GPIODirModeSet(GPIO_PORTF_BASE, sw1Pin, GPIO_DIR_MODE_IN);
+
+    // up button initial setup changes between three states (Alt %, ADC Mean Value, & Blank)
+    SysCtlPeripheralEnable (UP_BUT_PERIPH);
+    GPIOPinTypeGPIOInput (UP_BUT_PORT_BASE, UP_BUT_PIN);
+    GPIOPadConfigSet (UP_BUT_PORT_BASE, UP_BUT_PIN, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPD);
+}
+
+
 //*****************************************************************************
 //
 // Function to display the mean ADC value (10-bit value, note) and sample count.
@@ -200,89 +214,97 @@ displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t 
 }
 
 /**
- * Enable the GPIOB peripheral
- */
-void initGPIOInterrupts(void){
+ * yaw_calc function to read read states
+ * */
+void yaw_calc(void){
 
-    // Enable the GPIOB peripheral
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
+    char string[17];  // 16 characters across the display
 
-    /**Wait for the GPIOB module to be ready**/
-    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOB)){
+    if (state == 3) {
+
+        if (GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) {
+                state = 2;
+                yaw++;
+        }
+        else {
+                state = 4;
+                yaw--;
+        }
+
+
+    }
+    else {
+        if(!GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && !GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) {
+            state = 1;
+        }
+        if(!GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) {
+             state = 2;
+        }
+        if(GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) {
+             state = 3;
+        }
+        if(GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && !GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) {
+             state = 4;
+        }
     }
 
-    GPIOIntRegister(GPIO_PORTB_BASE, PortBIntHandler);
+    usnprintf (string, sizeof(string), "YAW = %4d ", yaw);
+    OLEDStringDraw (string, 0, 2);
 
-    /**Initialize the GPIO pin configuration**/
+    GPIOIntClear(GPIO_PORTB_BASE, CHANNEL_B_PIN);
+    GPIOIntClear(GPIO_PORTB_BASE, CHANNEL_A_PIN);
 
-    // sets pin 0, 1 as in put, SW controlled.
-    GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-
-
-    // makes pins 0 and 1 rising edge triggered interrupts
-    GPIOIntTypeSet(GPIO_PORTB_BASE, GPIO_PIN_0 | GPIO_PIN_1, GPIO_RISING_EDGE);
-
-    // Enable the pin interrupts
-    GPIOIntEnable(GPIO_PORTB_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-
-}
-
-void PortBIntHandler(void){
 
 }
 
 
 
-int
-main(void)
+void YawIntHandler(void){
 
-{
-	uint16_t i;
-	int32_t sum;
-	
+    if (GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN)){
+        OLEDStringDraw ("YAWWWWW", 0, 0);
+    }
+
+
+    if (!GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN)){
+        OLEDStringDraw ("anti-YAAAAWW", 0, 0);
+    }
+
+    GPIOIntClear(GPIO_PORTB_BASE, CHANNEL_A_PIN);
+}
+
+
+int main(void){
+
+    // initializations
 	initClock ();
 	initADC ();
 	initDisplay ();
 	initCircBuf (&g_inBuffer, BUF_SIZE);
-
-	// Configuration for interrupts
 	initGPIOInterrupts();
+	initButtonConfiguration();
 
-	// left button initial setup with hardware
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
-	GPIOPadConfigSet(GPIO_PORTF_BASE, sw1Pin, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD_WPU);
-	GPIODirModeSet(GPIO_PORTF_BASE, sw1Pin, GPIO_DIR_MODE_IN);
-
-	// up button initial setup changes between three states (Alt %, ADC Mean Value, & Blank)
-	SysCtlPeripheralEnable (UP_BUT_PERIPH);
-	GPIOPinTypeGPIOInput (UP_BUT_PORT_BASE, UP_BUT_PIN);
-    GPIOPadConfigSet (UP_BUT_PORT_BASE, UP_BUT_PIN, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPD);
+	uint16_t i; // use: circBuffer
+	int32_t sum; // use: circBuffer
+	int32_t isInit = 0; // use: init height
+	int32_t mode = 0; // use: current display mode
+	uint32_t newMode; // use: new display mode
 	int32_t initMeanVal = 0;
 
-	int32_t isInit = 0;
-	int32_t mode = 0;
-	uint32_t newMode;
+    IntMasterEnable(); // Enable interrupts to the processor.
 
-    //
-    // Enable interrupts to the processor.
-    IntMasterEnable();
-
-	while (1)
-	{
-		//
+	while (1){
 		// Background task: calculate the (approximate) mean of the values in the
 		// circular buffer and display it, together with the sample number.
 
 	    sum = 0;
-		for (i = 0; i < BUF_SIZE; i++){
+		for (i = 0; i < BUF_SIZE; i++)
 			sum = sum + readCircBuf (&g_inBuffer);
-		}
 
 		// Initializes new height
-		if (isInit == 10 || !GPIOPinRead(GPIO_PORTF_BASE, sw1Pin)) {
+		if (isInit == 10 || !GPIOPinRead(GPIO_PORTF_BASE, sw1Pin))
 		    initMeanVal = sum/10;
-		}
-		if(GPIOPinRead(GPIO_PORTB_BASE,  ))
+
 		// Calculate, display the rounded mean of the buffer contents, and returns mode.
 		newMode = displayMeanVal ((2 * sum + BUF_SIZE) / 2 / BUF_SIZE, g_ulSampCnt, initMeanVal, mode);
 		mode = newMode;

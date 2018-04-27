@@ -10,7 +10,7 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
-"./AltHeliEstimation.obj" \
+"./Helicopter.obj" \
 "./circBufT.obj" \
 "./tm4c123gh6pm_startup_ccs.obj" \
 "./ustdlib.obj" \
@@ -169,8 +169,8 @@ Milestone_One.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "AltHeliEstimation.obj" "circBufT.obj" "tm4c123gh6pm_startup_ccs.obj" "ustdlib.obj" "OrbitOLED\OrbitOLEDInterface.obj" "OrbitOLED\lib_OrbitOled\ChrFont0.obj" "OrbitOLED\lib_OrbitOled\FillPat.obj" "OrbitOLED\lib_OrbitOled\OrbitOled.obj" "OrbitOLED\lib_OrbitOled\OrbitOledChar.obj" "OrbitOLED\lib_OrbitOled\OrbitOledGrph.obj" "OrbitOLED\lib_OrbitOled\delay.obj" 
-	-$(RM) "AltHeliEstimation.d" "circBufT.d" "tm4c123gh6pm_startup_ccs.d" "ustdlib.d" "OrbitOLED\OrbitOLEDInterface.d" "OrbitOLED\lib_OrbitOled\ChrFont0.d" "OrbitOLED\lib_OrbitOled\FillPat.d" "OrbitOLED\lib_OrbitOled\OrbitOled.d" "OrbitOLED\lib_OrbitOled\OrbitOledChar.d" "OrbitOLED\lib_OrbitOled\OrbitOledGrph.d" "OrbitOLED\lib_OrbitOled\delay.d" 
+	-$(RM) "Helicopter.obj" "circBufT.obj" "tm4c123gh6pm_startup_ccs.obj" "ustdlib.obj" "OrbitOLED\OrbitOLEDInterface.obj" "OrbitOLED\lib_OrbitOled\ChrFont0.obj" "OrbitOLED\lib_OrbitOled\FillPat.obj" "OrbitOLED\lib_OrbitOled\OrbitOled.obj" "OrbitOLED\lib_OrbitOled\OrbitOledChar.obj" "OrbitOLED\lib_OrbitOled\OrbitOledGrph.obj" "OrbitOLED\lib_OrbitOled\delay.obj" 
+	-$(RM) "Helicopter.d" "circBufT.d" "tm4c123gh6pm_startup_ccs.d" "ustdlib.d" "OrbitOLED\OrbitOLEDInterface.d" "OrbitOLED\lib_OrbitOled\ChrFont0.d" "OrbitOLED\lib_OrbitOled\FillPat.d" "OrbitOLED\lib_OrbitOled\OrbitOled.d" "OrbitOLED\lib_OrbitOled\OrbitOledChar.d" "OrbitOLED\lib_OrbitOled\OrbitOledGrph.d" "OrbitOLED\lib_OrbitOled\delay.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
