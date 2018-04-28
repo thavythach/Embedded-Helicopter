@@ -16,6 +16,7 @@
 /** LIBRARIES | ENCE361 **/
 #include "circBufT.h"
 #include "OrbitOLED/OrbitOLEDInterface.h"
+#include "buttons4.h"
 
 /** CONSTANTS | DEFINITIONS **/
 #define BUF_SIZE 10
@@ -37,8 +38,6 @@ void initButtonConfiguration(void);
 /** PROTOTYPES | INTERRUPT HANDLERS **/
 void YawIntHandler(void);
 
-/** other stuff **/
-void yaw_calc(void);
 
 
 

@@ -15,31 +15,27 @@ static circBuf_t g_inBuffer;		// Buffer of size BUF_SIZE integers (sample values
 static uint32_t g_ulSampCnt;	// Counter for the interrupts
 static int32_t yaw;
 static uint8_t state;
+static int32_t deg;
 
 //*****************************************************************************
 //
 // The interrupt handler for the for SysTick interrupt.
 //
 //*****************************************************************************
-void
-SysTickIntHandler(void)
-{
+void SysTickIntHandler(void){
     //
     // Initiate a conversion
     //
     ADCProcessorTrigger(ADC0_BASE, 3); 
     g_ulSampCnt++;
+  //  updateButtons();
 }
 
-//*****************************************************************************
-//
-// The handler for the ADC conversion complete interrupt.
-// Writes to the circular buffer.
-//
-//*****************************************************************************
-void
-ADCIntHandler(void)
-{
+/**
+ * The handler for the ADC conversion complete interrupt.
+ * Writes to the circular buffer.
+ **/
+void ADCIntHandler(void){
 	uint32_t ulValue;
 	
 	//
@@ -57,9 +53,7 @@ ADCIntHandler(void)
 //*****************************************************************************
 // Initialisation functions for the clock (incl. SysTick), ADC, display
 //*****************************************************************************
-void
-initClock (void)
-{
+void initClock (void){
     // Set the clock rate to 20 MHz
     SysCtlClockSet (SYSCTL_SYSDIV_10 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN |
                    SYSCTL_XTAL_16MHZ);
@@ -77,9 +71,7 @@ initClock (void)
 
 }
 
-void 
-initADC (void)
-{
+void initADC (void){
     // The ADC0 peripheral must be enabled for configuration and use.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
     
@@ -111,10 +103,15 @@ initADC (void)
     ADCIntEnable(ADC0_BASE, 3);
 }
 
-void
-initDisplay (void)
-{
+void initDisplay (void){
     OLEDInitialise (); // intialise the Orbit OLED display
+
+    char string[17];  // 16 characters across the display
+
+    // Drawing to the screen
+    OLEDStringDraw ("Milestone 2", 0, 0);
+    usnprintf (string, sizeof(string), "YAW deg = %5d", yaw);
+    OLEDStringDraw (string, 0, 2);
 }
 
 /**
@@ -129,19 +126,19 @@ void initGPIOInterrupts(void){
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOB)){
     }
 
-    GPIOIntRegister(GPIO_PORTB_BASE, yaw_calc);
+    GPIOIntRegister(GPIO_PORTB_BASE, YawIntHandler);
 
     /**Initialize the GPIO pin configuration**/
 
     // sets pin 0, 1 as in put, SW controlled.
-    GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+    GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, CHANNEL_A_PIN | CHANNEL_B_PIN);
 
 
     // makes pins 0 and 1 rising edge triggered interrupts
-    GPIOIntTypeSet(GPIO_PORTB_BASE, GPIO_PIN_0 | GPIO_PIN_1, GPIO_RISING_EDGE);
+    GPIOIntTypeSet(GPIO_PORTB_BASE, CHANNEL_A_PIN | CHANNEL_B_PIN, GPIO_BOTH_EDGES);
 
     // Enable the pin interrupts
-    GPIOIntEnable(GPIO_PORTB_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+    GPIOIntEnable(GPIO_PORTB_BASE, CHANNEL_A_PIN | CHANNEL_B_PIN);
 
 
 }
@@ -151,6 +148,7 @@ void initGPIOInterrupts(void){
  */
 void initButtonConfiguration(void){
     // left button initial setup with hardware
+
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
     GPIOPadConfigSet(GPIO_PORTF_BASE, sw1Pin, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD_WPU);
     GPIODirModeSet(GPIO_PORTF_BASE, sw1Pin, GPIO_DIR_MODE_IN);
@@ -159,18 +157,18 @@ void initButtonConfiguration(void){
     SysCtlPeripheralEnable (UP_BUT_PERIPH);
     GPIOPinTypeGPIOInput (UP_BUT_PORT_BASE, UP_BUT_PIN);
     GPIOPadConfigSet (UP_BUT_PORT_BASE, UP_BUT_PIN, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPD);
+
+   // initButtons();
 }
 
-
-//*****************************************************************************
-//
-// Function to display the mean ADC value (10-bit value, note) and sample count.
-//
-//*****************************************************************************
+/**
+ * Function to display the mean ADC value (10-bit value, note) and sample count.
+ */
 uint32_t
 displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t mode)
 {
 	char string[17];  // 16 characters across the display
+    char strins[17];  // 16 characters across the display
 	
 	float rangeAltitude = 983.0;
 
@@ -186,7 +184,6 @@ displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t 
         else mode += 1;
     }
 
-    //
     uint32_t i=0;
     switch (mode){
         case 0:
@@ -196,7 +193,7 @@ displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t 
             usnprintf (string, sizeof(string), "Mean ADC = %4d ", meanVal);
             break;
         case 2:
-            for (i=0; i<4; i++)
+            for (i=0; i<3; i++)
                 OLEDStringDraw ("                ", 0, i);
             break;
         default:
@@ -206,70 +203,48 @@ displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t 
 
     // Displaying Title and conditional string denoting which mode
     if ( mode != 2 ){
-        OLEDStringDraw ("Milestone 1", 0, 0);
-        OLEDStringDraw (string, 0, 1);
+        OLEDStringDraw ("Milestone 2", 0, 0); // milestone display
+        OLEDStringDraw (string, 0, 1); // meanvalue display
+        usnprintf (strins, sizeof(strins), "YAW deg = %5d", deg);
+        OLEDStringDraw (strins, 0, 2); // yaw display
     }
 
     return mode;
 }
 
-/**
- * yaw_calc function to read read states
- * */
-void yaw_calc(void){
 
-    char string[17];  // 16 characters across the display
+void YawDegCalc(void){
+    deg = ( (int) (((float) yaw ) * (3.214285714) ));
+}
+
+/**
+ * calculates the yaw state
+ * */
+void YawIntHandler(void){
 
     if (state == 3) {
 
         if (GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) {
                 state = 2;
-                yaw++;
+                yaw--;
         }
         else {
                 state = 4;
-                yaw--;
+                yaw++;
         }
 
-
+        YawDegCalc(); // yaw degree calculation
     }
     else {
-        if(!GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && !GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) {
-            state = 1;
-        }
-        if(!GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) {
-             state = 2;
-        }
-        if(GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) {
-             state = 3;
-        }
-        if(GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && !GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) {
-             state = 4;
-        }
+        if(!GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && !GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) state = 1;
+        if(!GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) state = 2;
+        if(GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) state = 3;
+        if(GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && !GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) state = 4;
     }
 
-    usnprintf (string, sizeof(string), "YAW = %4d ", yaw);
-    OLEDStringDraw (string, 0, 2);
 
+    // clearing interrupts
     GPIOIntClear(GPIO_PORTB_BASE, CHANNEL_B_PIN);
-    GPIOIntClear(GPIO_PORTB_BASE, CHANNEL_A_PIN);
-
-
-}
-
-
-
-void YawIntHandler(void){
-
-    if (GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN)){
-        OLEDStringDraw ("YAWWWWW", 0, 0);
-    }
-
-
-    if (!GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN)){
-        OLEDStringDraw ("anti-YAAAAWW", 0, 0);
-    }
-
     GPIOIntClear(GPIO_PORTB_BASE, CHANNEL_A_PIN);
 }
 
@@ -282,6 +257,13 @@ int main(void){
 	initDisplay ();
 	initCircBuf (&g_inBuffer, BUF_SIZE);
 	initGPIOInterrupts();
+
+	/*
+	SysCtlPeripheralReset(UP_BUT_PERIPH);
+	SysCtlPeripheralReset(DOWN_BUT_PERIPH);
+	SysCtlPeripheralReset(LEFT_BUT_PERIPH);
+	SysCtlPeripheralReset(RIGHT_BUT_PERIPH);
+	*/
 	initButtonConfiguration();
 
 	uint16_t i; // use: circBuffer
@@ -289,9 +271,11 @@ int main(void){
 	int32_t isInit = 0; // use: init height
 	int32_t mode = 0; // use: current display mode
 	uint32_t newMode; // use: new display mode
-	int32_t initMeanVal = 0;
+	int32_t initMeanVal = 0; // use: initial mean value
+
 
     IntMasterEnable(); // Enable interrupts to the processor.
+
 
 	while (1){
 		// Background task: calculate the (approximate) mean of the values in the
@@ -308,6 +292,7 @@ int main(void){
 		// Calculate, display the rounded mean of the buffer contents, and returns mode.
 		newMode = displayMeanVal ((2 * sum + BUF_SIZE) / 2 / BUF_SIZE, g_ulSampCnt, initMeanVal, mode);
 		mode = newMode;
+
 
 		SysCtlDelay (SysCtlClockGet() / 24);  // Update display at ~8hz
 		isInit += 1;
