@@ -225,22 +225,49 @@ void YawIntHandler(void){
     if (state == 3) {
 
         if (GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) {
-                state = 2;
-                yaw--;
-        }
-        else {
                 state = 4;
                 yaw++;
         }
+        else {
+                state = 2;
+                yaw--;
+        }
+    }
 
-        YawDegCalc(); // yaw degree calculation
+    if (state == 1) {
+
+       if (GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) {
+               state = 2;
+               yaw++;
+       }
+       else {
+               state = 4;
+               yaw--;
+       }
     }
-    else {
-        if(!GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && !GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) state = 1;
-        if(!GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) state = 2;
-        if(GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) state = 3;
-        if(GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN && !GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN))) state = 4;
-    }
+   if (state == 2) {
+
+      if (GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) {
+              state = 3;
+              yaw++;
+      }
+      else {
+              state = 1;
+              yaw--;
+      }
+   }
+
+  if (state == 4) {
+
+         if (GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) {
+                 state = 3;
+                 yaw--;
+         }
+         else {
+                 state = 1;
+                 yaw++;
+         }
+  }
 
 
     // clearing interrupts
@@ -290,6 +317,7 @@ int main(void){
 		    initMeanVal = sum/10;
 
 		// Calculate, display the rounded mean of the buffer contents, and returns mode.
+        YawDegCalc(); // yaw degree calculation
 		newMode = displayMeanVal ((2 * sum + BUF_SIZE) / 2 / BUF_SIZE, g_ulSampCnt, initMeanVal, mode);
 		mode = newMode;
 
