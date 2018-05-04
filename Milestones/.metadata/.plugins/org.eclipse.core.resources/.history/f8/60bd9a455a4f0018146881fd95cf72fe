@@ -316,7 +316,7 @@ void YawIntHandler(void){
 }
 
 
-cd int main(void){
+int main(void){
 
     // initializations
     initClock ();
