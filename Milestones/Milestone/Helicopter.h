@@ -19,7 +19,7 @@
 #include "buttons4.h"
 
 /** CONSTANTS | DEFINITIONS **/
-#define BUF_SIZE 10
+#define BUF_SIZE 20
 #define SAMPLE_RATE_HZ 100 // equation for it... 2*buffsize*fmax (2*10*4)
 #define sw1Pin GPIO_PIN_4
 #define UP_BUT_PERIPH  SYSCTL_PERIPH_GPIOE

@@ -110,14 +110,15 @@ void initDisplay (void){
 
     // Drawing to the screen
     OLEDStringDraw ("Milestone 2", 0, 0);
-    usnprintf (string, sizeof(string), "YAW deg = %5d", yaw);
-    OLEDStringDraw (string, 0, 2);
+    //usnprintf (string, sizeof(string), "YAW deg = %5d", yaw);
+    //OLEDStringDraw (string, 0, 2);
 }
 
 /**
  * Enable the GPIOB peripheral
  */
 void initGPIOInterrupts(void){
+
 
     // Enable the GPIOB peripheral
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
@@ -139,6 +140,8 @@ void initGPIOInterrupts(void){
 
     // Enable the pin interrupts
     GPIOIntEnable(GPIO_PORTB_BASE, CHANNEL_A_PIN | CHANNEL_B_PIN);
+
+    // cool
 
 
 }
@@ -194,11 +197,13 @@ displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t 
             usnprintf (string, sizeof(string), "Mean ADC = %4d ", meanVal);
             break;
         case 2:
-            for (i=0; i<3; i++)
-                OLEDStringDraw ("                ", 0, i);
+            OLEDStringDraw ("                ", 0, 0);
+            OLEDStringDraw ("                ", 0, 1);
+            OLEDStringDraw ("                ", 0, 2);
+            OLEDStringDraw ("                ", 0, 3);
             break;
         default:
-            usnprintf (string, sizeof(string), "Alt %% = %4d ", robustMeanVal);
+           usnprintf (string, sizeof(string), "Alt %% = %4d ", robustMeanVal);
             break;
     }
 
@@ -208,8 +213,10 @@ displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t 
         OLEDStringDraw (string, 0, 1); // meanvalue display
         usnprintf (strins, sizeof(strins), "YAW deg = %5d", deg);
         OLEDStringDraw (strins, 0, 2); // yaw display
-        usnprintf (strinss, sizeof(strinss), "YAW  = %5d", yaw);
-        OLEDStringDraw (strinss, 0, 3); // yaw display
+        //usnprintf (strinss, sizeof(strinss), "YAW  = %5d", yaw);
+        //OLEDStringDraw (strinss, 0, 3); // yaw display
+        //usnprintf (strins, sizeof(strins), "state = %5d", state);
+          //       OLEDStringDraw (strins, 0, 2); // yaw display
     }
 
     return mode;
@@ -217,7 +224,7 @@ displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t 
 
 
 void YawDegCalc(void){
-    deg = ( (int) (((float) yaw ) * (3.214285714285714) ));
+    deg = ( (int) (((float) yaw ) * (0.8035714285714286) ));
 }
 
 /**
@@ -225,62 +232,81 @@ void YawDegCalc(void){
  * */
 void YawIntHandler(void){
 
-    // TODO: do logics for demo
-    uint32_t ch_a = GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN);
-    uint32_t ch_b = GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN);
 
 
+
+    // checking state 3
     if (state == 3) {
 
-        if (ch_b == 1) {
+        // if high // 2 // --
+        if (GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) {
                 state = 2;
                 yaw--;
         }
+
+        // if low // 4 // ++
         else {
                 state = 4;
                 yaw++;
         }
     }
 
-    if (state == 1) {
+    // checking state 1
+    else if (state == 1) {
 
-       if (ch_b == 1) {
+        // if high // 2 // ++
+       if (GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) {
                state = 2;
                yaw++;
        }
+
+       // if low // 4 / --
        else {
                state = 4;
                yaw--;
        }
     }
-   if (state == 2) {
 
-      if (ch_b == 1) {
+   // checking state 2
+    else if (state == 2) {
+
+       // if high // 3 // ++
+      if (GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) {
               state = 3;
               yaw++;
       }
+
+      // if low // 1 // --
       else {
               state = 1;
               yaw--;
       }
+
    }
 
-  if (state == 4) {
+   // checking state 4
+    else if (state == 4) {
 
-         if (ch_b == 1) {
+          // if high // 3 // --
+         if (GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) {
 
                  state = 3;
                  yaw--;
          }
+
+         // if low // 1 // ++
          else {
                  state = 1;
                  yaw++;
          }
-  } else {
-      if(!ch_a && !ch_b) state = 1;
-      if(!ch_a && ch_b) state = 2;
-      if(ch_a && ch_b) state = 3;
-      if(ch_a && !ch_b) state = 4;
+  }
+
+  //
+  else {
+      if(!GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN) && !GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) state = 1;
+      if(!GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN) && GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) state = 2;
+      if(GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN) && GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) state = 3;
+      if(GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN) && !GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) state = 4;
   }
 
 
@@ -327,13 +353,15 @@ int main(void){
             sum = sum + readCircBuf (&g_inBuffer);
 
         // Initializes new height
-        if (isInit == 10 || !GPIOPinRead(GPIO_PORTF_BASE, sw1Pin))
-            initMeanVal = sum/10;
+        if (isInit == 20 || !GPIOPinRead(GPIO_PORTF_BASE, sw1Pin))
+            initMeanVal = sum/20;
 
         // Calculate, display the rounded mean of the buffer contents, and returns mode.
         YawDegCalc(); // yaw degree calculation
         newMode = displayMeanVal ((2 * sum + BUF_SIZE) / 2 / BUF_SIZE, g_ulSampCnt, initMeanVal, mode);
         mode = newMode;
+
+
 
 
         SysCtlDelay (SysCtlClockGet() / 96);  // Update display at ~8hz
