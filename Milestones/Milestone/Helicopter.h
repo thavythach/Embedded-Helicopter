@@ -1,4 +1,3 @@
-
 /** LIBRARIES | TIVA **/
 #include <stdint.h>
 #include <stdbool.h>
@@ -17,6 +16,7 @@
 #include "circBufT.h"
 #include "OrbitOLED/OrbitOLEDInterface.h"
 #include "buttons4.h"
+#include "Pwm.h"
 
 /** CONSTANTS | DEFINITIONS **/
 #define BUF_SIZE 20
@@ -25,8 +25,6 @@
 #define UP_BUT_PERIPH  SYSCTL_PERIPH_GPIOE
 #define UP_BUT_PORT_BASE  GPIO_PORTE_BASE
 #define UP_BUT_PIN  GPIO_PIN_0
-
-
 #define CHANNEL_A_PIN GPIO_PIN_0
 #define CHANNEL_B_PIN GPIO_PIN_1
 #define YAW_SAMPLE_RATE_HZ 1792 // minimum sampling rate (1792 SAM/s = 112 slots * 4 samples/slot * 4 rev/s)

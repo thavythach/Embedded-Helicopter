@@ -316,7 +316,7 @@ void YawIntHandler(void){
 }
 
 
-cd int main(void){
+int main(void){
 
     // initializations
     initClock ();
@@ -360,9 +360,6 @@ cd int main(void){
         YawDegCalc(); // yaw degree calculation
         newMode = displayMeanVal ((2 * sum + BUF_SIZE) / 2 / BUF_SIZE, g_ulSampCnt, initMeanVal, mode);
         mode = newMode;
-
-
-
 
         SysCtlDelay (SysCtlClockGet() / 96);  // Update display at ~8hz
         isInit += 1;
