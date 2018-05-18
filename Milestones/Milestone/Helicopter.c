@@ -29,7 +29,7 @@ void SysTickIntHandler(void){
     //
     ADCProcessorTrigger(ADC0_BASE, 3); 
     g_ulSampCnt++;
-  //  updateButtons();
+    updateButtons();
 }
 
 /**
@@ -106,13 +106,6 @@ void initADC (void){
 
 void initDisplay (void){
     OLEDInitialise (); // intialise the Orbit OLED display
-
-    char string[17];  // 16 characters across the display
-
-    // Drawing to the screen
-    OLEDStringDraw ("Milestone 2", 0, 0);
-    //usnprintf (string, sizeof(string), "YAW deg = %5d", yaw);
-    //OLEDStringDraw (string, 0, 2);
 }
 
 /**
@@ -144,24 +137,6 @@ void initGPIOInterrupts(void){
 }
 
 /**
- * Enable Up & left Buttons
- */
-void initButtonConfiguration(void){
-    // left button initial setup with hardware
-
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
-    GPIOPadConfigSet(GPIO_PORTF_BASE, sw1Pin, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD_WPU);
-    GPIODirModeSet(GPIO_PORTF_BASE, sw1Pin, GPIO_DIR_MODE_IN);
-
-    // up button initial setup changes between three states (Alt %, ADC Mean Value, & Blank)
-    SysCtlPeripheralEnable (UP_BUT_PERIPH);
-    GPIOPinTypeGPIOInput (UP_BUT_PORT_BASE, UP_BUT_PIN);
-    GPIOPadConfigSet (UP_BUT_PORT_BASE, UP_BUT_PIN, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPD);
-
-   // initButtons();
-}
-
-/**
  * Function to display the mean ADC value (10-bit value, note) and sample count.
  */
 uint32_t
@@ -181,7 +156,7 @@ displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t 
     // if (meanVal < (initMeanVal-rangeAltitude)) robustMeanVal = 100;
 
     // Up Button Functionality to determine new mode to display.
-    if (GPIOPinRead (UP_BUT_PORT_BASE, UP_BUT_PIN)) {
+    if (checkButton(UP) == PUSHED) {
         if (mode == 2) mode = 0;
         else mode += 1;
     }
@@ -211,10 +186,6 @@ displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t 
         OLEDStringDraw (string, 0, 1); // meanvalue display
         usnprintf (strins, sizeof(strins), "YAW deg = %5d", deg);
         OLEDStringDraw (strins, 0, 2); // yaw display
-        //usnprintf (strinss, sizeof(strinss), "YAW  = %5d", yaw);
-        //OLEDStringDraw (strinss, 0, 3); // yaw display
-        //usnprintf (strins, sizeof(strins), "state = %5d", state);
-          //       OLEDStringDraw (strins, 0, 2); // yaw display
     }
 
     return mode;
@@ -321,15 +292,16 @@ void resetPeriphButtons(void){
 }
 
 int main(void){
-
+    resetPeriphButtons();
+    initButtons();
     // initializations
     initClock ();
-    resetPeriphButtons();
+   
     initADC ();
     initDisplay ();
     initCircBuf (&g_inBuffer, BUF_SIZE);
     initGPIOInterrupts();
-    initButtonConfiguration();
+    
 
     uint16_t i; // use: circBuffer
     int32_t sum; // use: circBuffer

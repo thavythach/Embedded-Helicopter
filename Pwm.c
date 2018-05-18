@@ -8,6 +8,10 @@ void setPWMClocks(void){
 }
 
 void setPWM(uint8_t isMainRotor, uint32_t ui32Duty){
+	// todo destroy pwm title @gabe
+	
+	if (ui32Duty > 98) ui32Duty = 98;
+	else if (ui32Duty < 2) ui32Duty = 2; 
 	
 	// Calculate the PWM period corresponding to the freq.
 	uint32_t ui32freq, ui32base, ui32gen, ui32outnum; 
