@@ -1,10 +1,10 @@
-#include "Pwm.h"
+#include "npwm.h"
 
 // "mainRotor" and "tailRotor" are your best friends.
 
 void setPWMClocks(void){
 	// Set the PWM clock rate (using the prescaler)
-    SysCtlPWMClockSet(config->dividerCode);
+    SysCtlPWMClockSet(config.dividerCode);
 }
 
 void setPWM(uint8_t isMainRotor, uint32_t ui32Duty){
@@ -13,20 +13,20 @@ void setPWM(uint8_t isMainRotor, uint32_t ui32Duty){
 	uint32_t ui32freq, ui32base, ui32gen, ui32outnum; 
 	
 	if (isMainRotor == 1){
-		ui32freq = config->mainFrequency;
-		ui32base = mainMotor->base;
-		ui32gen = mainMotor->gen;
-		ui32outnum = mainMotor->outnum;
-		config->mainDutyCycle = ui32Duty;
+		ui32freq = config.mainFrequency;
+		ui32base = mainRotor.base;
+		ui32gen = mainRotor.gen;
+		ui32outnum = mainRotor.outnum;
+		config.mainDutyCycle = ui32Duty;
 	} else {
-		ui32freq = config->tailFrequency;
-		ui32base = tailMotor->base;
-		ui32gen = tailMotor->gen;
-		ui32outnum = tailMotor->outnum;
-		config->tailDutyCycle = ui32Duty;
+		ui32freq = config.tailFrequency;
+		ui32base = tailRotor.base;
+		ui32gen = tailRotor.gen;
+		ui32outnum = tailRotor.outnum;
+		config.tailDutyCycle = ui32Duty;
 	}
 	
-	uint32_t ui32Period = SysCtlClockGet() / config->divide / ui32freq;
+	uint32_t ui32Period = SysCtlClockGet() / config.divider / ui32freq;
     PWMGenPeriodSet(ui32base, ui32gen, ui32Period);
     PWMPulseWidthSet(ui32base, ui32outnum,
         ui32Period * ui32Duty / 100);
@@ -40,25 +40,25 @@ void initializePWM(uint8_t isMainMotor){
 	uint8_t ui32GPIOPin;
 	
 	if (isMainRotor == 1){
-		ui32periphPWM = mainMotor->periphPWM;
-		ui32periphGPIO = mainMotor->periphGPIO;
-		ui32GPIOConfig = mainMotor->GPIOConfig;
-		ui32base = mainMotor->base;
-		ui32gen = mainMotor->gen;
-		ui32outbit = mainMotor->outbit;
-		ui32Duty = config->mainDutyCycle;
-		ui32freq = config->mainFrequency;
-		ui32GPIOPin = mainRotor->GPIOPin;
+		ui32periphPWM = mainRotor.periphPWM;
+		ui32periphGPIO = mainRotor.periphGPIO;
+		ui32GPIOConfig = mainRotor.GPIOConfig;
+		ui32base = mainRotor.base;
+		ui32gen = mainRotor.gen;
+		ui32outbit = mainRotor.outbit;
+		ui32Duty = config.mainDutyCycle;
+		ui32freq = config.mainFrequency;
+		ui32GPIOPin = mainRotor.GPIOPin;
 	} else {
-		ui32periphPWM = tailMotor->periphPWM;
-		ui32periphGPIO = tailMotor->periphGPIO;
-		ui32GPIOConfig = tailMotor->GPIOConfig;
-		ui32base = tailMotor->base;
-		ui32gen = tailMotor->gen;
-		ui32outbit = tailMotor->outbit;
-		ui32Duty = config->tailDutyCycle;
-		ui32freq = config->tailFrequency;
-		ui32GPIOPin = tailRotor->GPIOPin;
+		ui32periphPWM = tailRotor.periphPWM;
+		ui32periphGPIO = tailRotor.periphGPIO;
+		ui32GPIOConfig = tailRotor.GPIOConfig;
+		ui32base = tailRotor.base;
+		ui32gen = tailRotor.gen;
+		ui32outbit = tailRotor.outbit;
+		ui32Duty = config.tailDutyCycle;
+		ui32freq = config.tailFrequency;
+		ui32GPIOPin = tailRotor.GPIOPin;
 	}	
 	
 	SysCtlPeripheralEnable(ui32periphPWM);
@@ -74,6 +74,22 @@ void initializePWM(uint8_t isMainMotor){
     setPWMTAIL (ui32freq, ui32Duty); // Set the initial PWM parameters
     PWMGenEnable(ui32base, ui32gen);
     PWMOutputState(ui32base, ui32outbit, false); // Disable the output.  Repeat this call with 'true' to turn O/P on.
+}
+
+void resetPeripheralPWM(){
+
+	 // As a precaution, make sure that the peripherals used are reset
+    SysCtlPeripheralReset (mainRotor.periphGPIO); // Used for PWM output
+    SysCtlPeripheralReset (mainRotor.periphPWM);  // Main Rotor PWM
+    SysCtlPeripheralReset (tailRotor.periphGPIO); // Used for PWM output
+    SysCtlPeripheralReset (tailRotor.periphPWM);  // TAIL rotor PWM
+}
+
+
+void setOutputOnline(bool isOn){
+	isOn = true; // for right now
+	PWMOutputState(mainRotor.base, mainRotor.outbit, isOn); // true
+    PWMOutputState(tailRotor.base, tailRotor.outbit, isOn); // true
 }
 
 	

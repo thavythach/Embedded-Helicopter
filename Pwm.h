@@ -1,5 +1,4 @@
 /** LIBRARIES | TIVA **/
-
 #include <stdint.h>
 #include <stdbool.h>
 #include "inc/hw_memmap.h"
@@ -12,6 +11,7 @@
 #include "driverlib/interrupt.h"
 #include "driverlib/debug.h"
 #include "utils/ustdlib.h"
+
 
 struct pwmConfig {
 	uint32_t rateMinHZ;
@@ -48,12 +48,12 @@ struct pwmRotor mainRotor = { PWM0_BASE, PWM_GEN_3, PWM_OUT_7, PWM_OUT_7_BIT, SY
 struct pwmRotor tailRotor = { PWM1_BASE, PWM_GEN_2, PWM_OUT_5, PWM_OUT_5_BIT, SYSCTL_PERIPH_PWM1, SYS_PERIPH_GPIOF, GPIO_PORTF_BASE, GPIO_PF1_M0PWM5, GPIO_PIN_1 };
 
 void setUpPWMSignals(void); // requires initialization in main()
+void setPWMClocks(void);
 void setPWM(uint32_t isMainRotor, uint32_t ui32Duty);
 void initializePWM(uint8_t isMainMotor);
+void resetPeripheralPWM(void);
+void setOutputOnline(bool isOn);
 
-// TODO
-void resetPeripheralPWM(uint8_t isMainMotor);
-void setOutputOnline(uint8_t isMainMotor);
 
 // todo: a display of the pwm duty cycle for each motor as a percentage is maintained on the orbit display.
 

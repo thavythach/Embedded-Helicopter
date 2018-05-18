@@ -35,6 +35,7 @@ void initButtonConfiguration(void);
 
 /** PROTOTYPES | INTERRUPT HANDLERS **/
 void YawIntHandler(void);
+void resetPeriphButtons(void);
 
 
 

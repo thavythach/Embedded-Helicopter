@@ -1,4 +1,4 @@
-/**********************************************************
+ /**********************************************************
  *
  * pwmGen.c - Example code which generates a single PWM
  *    output on J4-05 (M0PWM7) with duty cycle fixed and

@@ -15,6 +15,7 @@ static circBuf_t g_inBuffer;        // Buffer of size BUF_SIZE integers (sample 
 static uint32_t g_ulSampCnt;    // Counter for the interrupts
 static int32_t yaw;
 static uint8_t state;
+static int32_t altitude; // main +- 10%
 static int32_t deg;
 
 //*****************************************************************************
@@ -140,10 +141,6 @@ void initGPIOInterrupts(void){
 
     // Enable the pin interrupts
     GPIOIntEnable(GPIO_PORTB_BASE, CHANNEL_A_PIN | CHANNEL_B_PIN);
-
-    // cool
-
-
 }
 
 /**
@@ -178,6 +175,7 @@ displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t 
     float rangeAltitude = 983.0;
 
     int32_t robustMeanVal = (( ((float)initMeanVal) - ((float) meanVal) ) / rangeAltitude) * 100;
+    altitude = robustMeanVal;
 
     // edge case: past 0.8V
     // if (meanVal < (initMeanVal-rangeAltitude)) robustMeanVal = 100;
@@ -315,22 +313,22 @@ void YawIntHandler(void){
     GPIOIntClear(GPIO_PORTB_BASE, CHANNEL_A_PIN);
 }
 
+void resetPeriphButtons(void){
+    SysCtlPeripheralReset (UP_BUT_PERIPH);        // UP button GPIO
+    SysCtlPeripheralReset (DOWN_BUT_PERIPH);      // DOWN button GPIO
+    SysCtlPeripheralReset (RIGHT_BUT_PERIPH);      // RIGHT button GPIO
+    SysCtlPeripheralReset (LEFT_BUT_PERIPH);      // LEFT button GPIO
+}
 
 int main(void){
 
     // initializations
     initClock ();
+    resetPeriphButtons();
     initADC ();
     initDisplay ();
     initCircBuf (&g_inBuffer, BUF_SIZE);
     initGPIOInterrupts();
-
-    /*
-    SysCtlPeripheralReset(UP_BUT_PERIPH);
-    SysCtlPeripheralReset(DOWN_BUT_PERIPH);
-    SysCtlPeripheralReset(LEFT_BUT_PERIPH);
-    SysCtlPeripheralReset(RIGHT_BUT_PERIPH);
-    */
     initButtonConfiguration();
 
     uint16_t i; // use: circBuffer
