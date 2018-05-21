@@ -1,4 +1,4 @@
-
+#include "Helicopter.h"
 
 void mainProportional(uint32_t altitude){ 
     double error;
@@ -22,4 +22,8 @@ void tailProportional(int32_t yaw){
     control = pcontrol_update(error, 3) ; 
 
     setPWM(1,  (int)control);  
+}
+
+double pcontrol_update ( double error , double K_P ){
+    return error * K_P ;
 }

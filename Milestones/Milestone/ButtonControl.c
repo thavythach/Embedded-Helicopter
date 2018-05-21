@@ -19,8 +19,6 @@
  */
 #include "ButtonControl.h"
 
-
-
 int16_t yawDegreeConvert(int32_t yaw) {
     return (int)(yaw * 0.8035714285714286);
 }
