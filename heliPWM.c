@@ -1,4 +1,4 @@
-#include "npwm.h"
+#include "heliPWM.h"
 
 // "mainRotor" and "tailRotor" are your best friends.
 
@@ -8,7 +8,6 @@ void setPWMClocks(void){
 }
 
 void setPWM(uint8_t isMainRotor, uint32_t ui32Duty){
-	// todo destroy pwm title @gabe
 	
 	if (ui32Duty > 98) ui32Duty = 98;
 	else if (ui32Duty < 2) ui32Duty = 2; 
@@ -31,11 +30,9 @@ void setPWM(uint8_t isMainRotor, uint32_t ui32Duty){
 	}
 	
 	uint32_t ui32Period = SysCtlClockGet() / config.divider / ui32freq;
-    PWMGenPeriodSet(ui32base, ui32gen, ui32Period);
+    //PWMGenPeriodSet(ui32base, ui32gen, ui32Period);
     PWMPulseWidthSet(ui32base, ui32outnum,
         ui32Period * ui32Duty / 100);
-	
-
 }
 
 void initializePWM(uint8_t isMainMotor){
@@ -68,14 +65,14 @@ void initializePWM(uint8_t isMainMotor){
 	SysCtlPeripheralEnable(ui32periphPWM);
     SysCtlPeripheralEnable(ui32periphGPIO);
 	
-    GPIOPinConfigure(PWM_TAIL_GPIO_CONFIG);
+    GPIOPinConfigure(ui32periphGPIO);
 	
-    GPIOPinTypePWM(PWM_TAIL_GPIO_BASE, PWM_TAIL_GPIO_PIN);
+    GPIOPinTypePWM(ui32base, ui32GPIOPin);
 	
     PWMGenConfigure(ui32base, ui32gen,
                     PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);	
 					
-    setPWMTAIL (ui32freq, ui32Duty); // Set the initial PWM parameters
+    setPWM(isMainMotor, ui32Duty); // Set the initial PWM parameters
     PWMGenEnable(ui32base, ui32gen);
     PWMOutputState(ui32base, ui32outbit, false); // Disable the output.  Repeat this call with 'true' to turn O/P on.
 }

@@ -16,7 +16,7 @@
 #include "circBufT.h"
 #include "OrbitOLED/OrbitOLEDInterface.h"
 #include "buttons4.h"
-//#include "Pwm.h"
+#include "heliPWM.h"
 
 /** CONSTANTS | DEFINITIONS **/
 #define BUF_SIZE 20

@@ -65,6 +65,8 @@ void initClock (void){
     //
     // Register the interrupt handler
     SysTickIntRegister(SysTickIntHandler);
+
+    setPWMClocks();
     //
     // Enable interrupt and device
     SysTickIntEnable();
@@ -201,9 +203,6 @@ void YawDegCalc(void){
  * */
 void YawIntHandler(void){
 
-
-
-
     // checking state 3
     if (state == 3) {
 
@@ -270,7 +269,7 @@ void YawIntHandler(void){
          }
   }
 
-  //
+  // else do everything else
   else {
       if(!GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN) && !GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) state = 1;
       if(!GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_A_PIN) && GPIOPinRead(GPIO_PORTB_BASE, CHANNEL_B_PIN)) state = 2;
@@ -292,16 +291,21 @@ void resetPeriphButtons(void){
 }
 
 int main(void){
+
+    // reset peripheral
     resetPeriphButtons();
-    initButtons();
+    resetPeripheralPWM();
+
     // initializations
+    initButtons();
     initClock ();
-   
     initADC ();
     initDisplay ();
     initCircBuf (&g_inBuffer, BUF_SIZE);
     initGPIOInterrupts();
-    
+    initializePWM(0); // init tail
+    initializePWM(1); // init main
+    setOutputOnline(true); // set both PWM signal outputs online
 
     uint16_t i; // use: circBuffer
     int32_t sum; // use: circBuffer

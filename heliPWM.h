@@ -14,8 +14,8 @@
 
 
 struct pwmConfig {
-	uint32_t rateMinHZ;
-	uint32_t rateMaxHZ;
+	uint32_t rateMinHZ; // unused
+	uint32_t rateMaxHZ; // unused
 	uint32_t mainDutyCycle;
 	uint32_t TailDutyCycle;
 	uint32_t mainFrequency;
@@ -49,7 +49,7 @@ struct pwmRotor tailRotor = { PWM1_BASE, PWM_GEN_2, PWM_OUT_5, PWM_OUT_5_BIT, SY
 
 void setUpPWMSignals(void); // requires initialization in main()
 void setPWMClocks(void);
-void setPWM(uint32_t isMainRotor, uint32_t ui32Duty);
+void setPWM(uint32_t isMainRotor, uint32_t ui32Duty); // todo set pwm in struct!
 void initializePWM(uint8_t isMainMotor);
 void resetPeripheralPWM(void);
 void setOutputOnline(bool isOn);

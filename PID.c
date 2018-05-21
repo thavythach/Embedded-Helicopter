@@ -7,9 +7,9 @@ void mainProportional(uint32_t altitude){
     pacer_wait () ; 
 
     error = altitude - getAltitudeSetPoint();
-    control = pcontrol_update(error, 1) ;
+    control = pcontrol_update(error, 5) ; 
 
-    setPWM(1,  control);  
+    setPWM(1,  (int)control);  
 }
 
 void tailProportional(int32_t yaw){
@@ -19,7 +19,7 @@ void tailProportional(int32_t yaw){
     pacer_wait () ; 
 
     error = yaw - getYawSetPoint();
-    control = pcontrol_update(error, 1) ; // K_P is 1 for now
+    control = pcontrol_update(error, 3) ; 
 
-    setPWM(1,  control);  
+    setPWM(1,  (int)control);  
 }
