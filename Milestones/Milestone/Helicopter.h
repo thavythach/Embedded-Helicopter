@@ -15,8 +15,9 @@
 /** LIBRARIES | ENCE361 **/
 #include "circBufT.h"
 #include "OrbitOLED/OrbitOLEDInterface.h"
-#include "buttons4.h"
+#include "buttonsControl.h"
 #include "heliPWM.h"
+#include "heliADC.h"
 
 /** CONSTANTS | DEFINITIONS **/
 #define BUF_SIZE 20
@@ -35,8 +36,6 @@ void initButtonConfiguration(void);
 
 /** PROTOTYPES | INTERRUPT HANDLERS **/
 void YawIntHandler(void);
-void resetPeriphButtons(void);
-
 
 
 

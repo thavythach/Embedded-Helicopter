@@ -3,8 +3,7 @@
 // "mainRotor" and "tailRotor" are your best friends.
 
 void setPWMClocks(void){
-	// Set the PWM clock rate (using the prescaler)
-    SysCtlPWMClockSet(config.dividerCode);
+    SysCtlPWMClockSet(config.dividerCode); 	// Set the PWM clock rate (using the prescaler)
 }
 
 void setPWM(uint8_t isMainRotor, uint32_t ui32Duty){
@@ -30,9 +29,10 @@ void setPWM(uint8_t isMainRotor, uint32_t ui32Duty){
 	}
 	
 	uint32_t ui32Period = SysCtlClockGet() / config.divider / ui32freq;
-    //PWMGenPeriodSet(ui32base, ui32gen, ui32Period);
+    //PWMGenPeriodSet(ui32base, ui32gen, ui32Period); // not used b/c we are not setting the frequency
     PWMPulseWidthSet(ui32base, ui32outnum,
         ui32Period * ui32Duty / 100);
+
 }
 
 void initializePWM(uint8_t isMainMotor){
