@@ -283,12 +283,7 @@ void YawIntHandler(void){
     GPIOIntClear(GPIO_PORTB_BASE, CHANNEL_A_PIN);
 }
 
-void resetPeriphButtons(void){
-    SysCtlPeripheralReset (UP_BUT_PERIPH);        // UP button GPIO
-    SysCtlPeripheralReset (DOWN_BUT_PERIPH);      // DOWN button GPIO
-    SysCtlPeripheralReset (RIGHT_BUT_PERIPH);      // RIGHT button GPIO
-    SysCtlPeripheralReset (LEFT_BUT_PERIPH);      // LEFT button GPIO
-}
+
 
 int main(void){
 
@@ -316,8 +311,6 @@ int main(void){
 
 
     IntMasterEnable(); // Enable interrupts to the processor.
-
-
     while (1){
         // Background task: calculate the (approximate) mean of the values in the
         // circular buffer and display it, together with the sample number.

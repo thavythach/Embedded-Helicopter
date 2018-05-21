@@ -68,6 +68,13 @@ int8_t getYawDegreesSetPoint() {
     return setPoints.yawSetPoint;
 }
 
+void resetPeriphButtons(void){
+    SysCtlPeripheralReset (UP_BUT_PERIPH);        // UP button GPIO
+    SysCtlPeripheralReset (DOWN_BUT_PERIPH);      // DOWN button GPIO
+    SysCtlPeripheralReset (RIGHT_BUT_PERIPH);      // RIGHT button GPIO
+    SysCtlPeripheralReset (LEFT_BUT_PERIPH);      // LEFT button GPIO
+}
+
 void buttonControllerInit(int32_t yaw, uint8_t altPercent) {
     initSetPoints(yaw, altPercent);
 }

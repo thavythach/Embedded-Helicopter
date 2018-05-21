@@ -63,6 +63,7 @@ int8_t getYawDegreesSetPoint();
  */
 void buttonControllerInit(int32_t yaw, uint8_t altPercent);
 
+void resetPeriphButtons(void);
 
 /*
  * place in the main loop to check the buttons for input commands
