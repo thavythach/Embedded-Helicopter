@@ -64,7 +64,7 @@ uint32_t displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, 
             OLEDStringDraw ("                ", 0, 3);
             break;
         default:
-            usnprintf (string, sizeof(string), "Alt %% = %4d ", robustMeanVal);
+            usnprintf (string, sizeof(string), "Alt %% = %4d ", altitude);
             break;
     }
 
