@@ -27,6 +27,7 @@ int32_t initializeMeanValue(int32_t isInit, int32_t meanVal);
 uint32_t displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t mode);
 void initializeHelicopterOperations(void);
 void resetHelicopterOperations(void);
+void calculateRobustMeanValue(uint32_t initMeanVal, uint32_t meanVal);
 
 static circBuf_t g_inBuffer;        // Buffer of size BUF_SIZE integers (sample values)
 static uint32_t g_ulSampCnt;    // Counter for the interrupts
@@ -37,10 +38,8 @@ static int32_t deg;
 
 #define BUF_SIZE 20
 #define SAMPLE_RATE_HZ 100 // equation for it... 2*buffsize*fmax (2*10*4)
-#define UP_BUT_PERIPH  SYSCTL_PERIPH_GPIOE
-#define UP_BUT_PORT_BASE  GPIO_PORTE_BASE
-#define UP_BUT_PIN  GPIO_PIN_0
-//#define sw1Pin GPIO_PIN_4 // TODO: remove if not needed
+#define RANGE_ALTITUDE 983.0
+#define sw1Pin GPIO_PIN_4 
 
 /** 
  * YAW @heliYAW.c

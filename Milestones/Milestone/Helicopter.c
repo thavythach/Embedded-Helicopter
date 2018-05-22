@@ -32,18 +32,20 @@ void initDisplay (void){
     OLEDInitialise (); // intialise the Orbit OLED display
 }
 
+void calculateRobustMeanValue(uint32_t initMeanVal, uint32_t meanVal){
+    altitude = (( ((float)initMeanVal) - ((float) meanVal) ) / RANGE_ALTITUDE) * 100;
+    }
+
 /**
  * Function to display the mean ADC value (10-bit value, note) and sample count.
  */
 uint32_t displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t mode){
-    char string[17];  // 16 characters across the display
-    char strins[17];  // 16 characters across the display
-    char strinss[17];  // 16 characters across the display
+    char line_0[17];  // 16 characters across the display
+    char line_1[17];  // 16 characters across the display
+    char line_2[17];  // 16 characters across the display
+    char line_2[17];  // 16 characters across the display
 
-    float rangeAltitude = 983.0;
-
-    int32_t robustMeanVal = (( ((float)initMeanVal) - ((float) meanVal) ) / rangeAltitude) * 100;
-    altitude = robustMeanVal;
+    calculateRobustMeanValue(initMeanVal, meanVal);
 
     // Up Button Functionality to determine new mode to display.
     if (checkButton(UP) == PUSHED) {
@@ -51,22 +53,18 @@ uint32_t displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, 
         else mode += 1;
     }
 
-    uint32_t i=0;
     switch (mode){
-        case 0:
-            usnprintf (string, sizeof(string), "Alt %% = %4d ", robustMeanVal);
-            break;
-        case 1:
+        case 1: // Chaneg Altitude to 
             usnprintf (string, sizeof(string), "Mean ADC = %4d ", meanVal);
             break;
-        case 2:
+        case 2: // clear oled screen
             OLEDStringDraw ("                ", 0, 0);
             OLEDStringDraw ("                ", 0, 1);
             OLEDStringDraw ("                ", 0, 2);
             OLEDStringDraw ("                ", 0, 3);
             break;
         default:
-           usnprintf (string, sizeof(string), "Alt %% = %4d ", robustMeanVal);
+            usnprintf (string, sizeof(string), "Alt %% = %4d ", robustMeanVal);
             break;
     }
 
@@ -79,18 +77,6 @@ uint32_t displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, 
     }
 
     return mode;
-}
-
-void doCircularBufferApproximation(int32_t sum){
-    uint16_t i = 0;
-    for (i = 0; i < BUF_SIZE; i++)
-        sum = sum + readCircBuf (&g_inBuffer);
-}
-
-int32_t initializeMeanValue(int32_t isInit, int32_t meanVal){
-    if (isInit == 20 || !GPIOPinRead(GPIO_PORTF_BASE, sw1Pin))
-        meanVal = sum/20;
-    return mealVal;
 }
 
 void updateDisplay(int32_t value){
