@@ -1,6 +1,4 @@
-
 #include "Helicopter.h"
-
 
 // The interrupt handler for the for SysTick interrupt.
 void SysTickIntHandler(void){
@@ -33,7 +31,6 @@ void initClock (void){
 void initDisplay (void){
     OLEDInitialise (); // intialise the Orbit OLED display
 }
-
 
 /**
  * Function to display the mean ADC value (10-bit value, note) and sample count.
@@ -88,6 +85,41 @@ void doCircularBufferApproximation(int32_t sum){
     uint16_t i = 0;
     for (i = 0; i < BUF_SIZE; i++)
         sum = sum + readCircBuf (&g_inBuffer);
+}
+
+int32_t initializeMeanValue(int32_t isInit, int32_t meanVal){
+    if (isInit == 20 || !GPIOPinRead(GPIO_PORTF_BASE, sw1Pin))
+        meanVal = sum/20;
+    return mealVal;
+}
+
+void updateDisplay(int32_t value){
+    SysCtlDelay (SysCtlClockGet() / value);  // Update display at ~8hz
+}
+
+void resetHelicopterOperations(void){
+    resetPeriphButtons(); // reset peripherals @ buttons4.h and buttonControl.h
+    resetPeripheralPWM(); // reset peripherals @ heliPWM.h
+}
+
+void initializeHelicopterOperations(void){
+    resetHelicopterOperations(); // resets all peripherals used in helicopter
+    
+    initButtons(); // button setup @ buttons4.h and buttonControl.h
+    initClock (); // clock setup @
+    
+    initADC (); // Analogue-To-Digital Conversion(s)
+    
+    initDisplay (); // OLED DISPLAY
+
+    initCircBuf (&g_inBuffer, BUF_SIZE); // from @ tiva src files
+
+    initYaw(); // yaw
+
+    /** heliPWM.h initializations **/
+    initializePWM(0); // init tail
+    initializePWM(1); // init main
+    setOutputOnline(true); // set both PWM output signals online
 }
 
 

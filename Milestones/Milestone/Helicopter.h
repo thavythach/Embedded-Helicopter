@@ -21,11 +21,10 @@
 /** Miscellaneous Prototypes **/
 void initDisplay(void); // OLED display
 void initClock (void); 
+void UpdateDisplay();
+void doCircularBufferApproximation(int32_t sum);
+int32_t initializeMeanValue(int32_t isInit, int32_t meanVal);
 uint32_t displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t mode);
-
-/**
- * Main
- * **/
 void initializeHelicopterOperations(void);
 void resetHelicopterOperations(void);
 
