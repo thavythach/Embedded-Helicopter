@@ -20,12 +20,10 @@
 #include "Helicopter.h"
 
 //initialize static variables *************************************************************
-mode = 0;
-SW1Position = DOWN;
 
 //Functions *******************************************************************************
 int16_t yawDegreeConvert(int32_t tempYaw) {
-    return (int) tempYaw * 0.8035714285714286);
+    return ((int) tempYaw * 0.8035714285714286);
 }
 
 
@@ -84,7 +82,7 @@ void buttonControllerLoop() {
 
 void SW1setup() {
     SysCtlPeripheralEnable (SW1_PORT);
-       GPIOPinTypeGPIOInput (SW1_, UP_BUT_PIN);
+       GPIOPinTypeGPIOInput (SW1_PORT_BASE, UP_BUT_PIN);
        GPIOPadConfigSet (SW1_PORT_BASE, SW1_PIN, GPIO_STRENGTH_2MA,
           GPIO_PIN_TYPE_STD_WPD); //pull up or pull down??
 
@@ -117,7 +115,7 @@ void initGPIOAPinChangeInterrupts(void){
     SysCtlPeripheralEnable(SW1_PORT);
 
     /**Wait for the GPIOA module to be ready**/
-    while(!SysCtlPeripheralReady(SW1_Port)){
+    while(!SysCtlPeripheralReady(SW1_PORT)){
     }
 
     GPIOIntRegister(SW1_PORT, SW1IntHandler);
@@ -136,12 +134,12 @@ void initGPIOAPinChangeInterrupts(void){
 }
 
 void SW1IntHandler() {
-    if (getSW1Mode() != 2) {
-        if ((getSW1Mode() == 1) && !getSW1Position()) {
-            setSW1Mode(2);
+    if (getSW1mode() != 2) {
+        if ((getSW1mode() == 1) && !getSW1Position()) {
+            setSW1mode(2);
         }
         if (getSW1Position()) {
-            setSW1Mode(1)
+            setSW1mode(1);
         }
     }
   

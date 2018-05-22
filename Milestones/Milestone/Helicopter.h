@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
+#include "inc/hw_gpio.h"
 #include "driverlib/adc.h"
 #include "driverlib/pwm.h"
 #include "driverlib/gpio.h"
@@ -11,6 +12,8 @@
 #include "driverlib/interrupt.h"
 #include "driverlib/debug.h"
 #include "utils/ustdlib.h"
+#include "driverlib/pin_map.h" //Needed for pin configure
+
 
 /** LIBRARIES | ENCE361 **/
 #include "circBufT.h"
@@ -20,7 +23,7 @@
 /** Miscellaneous Prototypes **/
 void initDisplay(void); // OLED display
 void initClock (void); 
-void UpdateDisplay();
+void updateDisplay(int32_t val);
 void doCircularBufferApproximation(int32_t sum);
 int32_t initializeMeanValue(int32_t isInit, int32_t meanVal);
 uint32_t displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t mode);
@@ -78,7 +81,7 @@ struct pwmConfig {
 	uint32_t rateMinHZ; // unused
 	uint32_t rateMaxHZ; // unused
 	uint32_t mainDutyCycle;
-	uint32_t TailDutyCycle;
+	uint32_t tailDutyCycle;
 	uint32_t mainFrequency;
 	uint32_t tailFrequency;
 	uint32_t dividerCode;
@@ -98,22 +101,13 @@ struct pwmRotor {
 };
 
 // configuration for both dreams
-struct pwmConfig config = {150, 300, 0, 0, 250, 200, SYSCTL_PWMDIV_4, 4};
-
-//  PWM Hardware Details M0PWM7 (gen 3)
-//  ---Main Rotor PWM: PC5, J4-05
-struct pwmRotor mainRotor = { PWM0_BASE, PWM_GEN_3, PWM_OUT_7, PWM_OUT_7_BIT, SYSCTL_PERIPH_PWM0, SYS_PERIPH_GPIOC, GPIO_PORTC_BASE, GPIO_PC5_M0PWM7, GPIO_PIN_5 };
-
-//  PWM Hardware Details M1PWM5 (gen 2)  
-//  ---Tail Rotor PWM: PF1, J3-10   
-struct pwmRotor tailRotor = { PWM1_BASE, PWM_GEN_2, PWM_OUT_5, PWM_OUT_5_BIT, SYSCTL_PERIPH_PWM1, SYS_PERIPH_GPIOF, GPIO_PORTF_BASE, GPIO_PF1_M0PWM5, GPIO_PIN_1 };
 
 // prototypes
 void setPWMClocks(void);
-void setPWM(uint32_t isMainRotor, uint32_t ui32Duty); 
+void setPWM(uint8_t isMainRotor, uint32_t ui32Duty);
 void initializePWM(uint8_t isMainMotor);
 void resetPeripheralPWM(void);
-void setOutputOnline(bool isOn);
+void setOutputOnline(int32_t isMainRotor, bool isOn);
 
 // todo: a display of the pwm duty cycle for each motor as a percentage is maintained on the orbit display.
 
@@ -141,9 +135,9 @@ double pcontrol_update ( double error , double K_P );
     int32_t yawSetPoint; // integer rounded degree value, current degrees from reference +/- change
 } setPoints;
 
-static int8_t mode;
-static int8_t SW1Position;
-enum position {DOWN = 0, UP = 1};
+static int8_t mode = 0;
+static int8_t  SW1Position = DOWN;
+enum position {down = 0, up = 1};
 
 
 

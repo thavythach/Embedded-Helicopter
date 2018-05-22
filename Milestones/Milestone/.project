@@ -36,6 +36,31 @@
 			<location>P:/lab_a03_group_2/Dependencies/buttons4.h</location>
 		</link>
 		<link>
+			<name>heliADC.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/HeliSource/heliADC.c</locationURI>
+		</link>
+		<link>
+			<name>heliPID.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/HeliSource/heliPID.c</locationURI>
+		</link>
+		<link>
+			<name>heliPWM.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/HeliSource/heliPWM.c</locationURI>
+		</link>
+		<link>
+			<name>heliYAW.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/HeliSource/heliYAW.c</locationURI>
+		</link>
+		<link>
+			<name>main.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/HeliSource/main.c</locationURI>
+		</link>
+		<link>
 			<name>ustdlib.c</name>
 			<type>1</type>
 			<location>C:/ti/TivaWare_C_Series-2.1.4.178/utils/ustdlib.c</location>

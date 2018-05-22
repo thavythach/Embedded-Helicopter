@@ -13,11 +13,12 @@ int main(void){
     while (1){
         
         // Background task: calculate the (approximate) mean of the values in the circular buffer and display it, together with the sample number.
+        int32_t sum = 0;
         for (i = 0; i < BUF_SIZE; i++)
             sum = sum + readCircBuf (&g_inBuffer);
 
         // Initializes new height
-        if (isInit == 20 || !GPIOPinRead(GPIO_PORTF_BASE, sw1Pin))
+        if (isHeightInitialized == 20 || !GPIOPinRead(GPIO_PORTF_BASE, sw1Pin))
             initMeanVal = sum/20;
         isHeightInitialized ++;
 

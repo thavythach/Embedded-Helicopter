@@ -40,10 +40,10 @@ void calculateRobustMeanValue(uint32_t initMeanVal, uint32_t meanVal){
  * Function to display the mean ADC value (10-bit value, note) and sample count.
  */
 uint32_t displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t mode){
-    char line_0[17];  // 16 characters across the display
-    char line_1[17];  // 16 characters across the display
-    char line_2[17];  // 16 characters across the display
-    char line_2[17];  // 16 characters across the display
+    char string[17];  // 16 characters across the display
+    char strins[17];  // 16 characters across the display
+    //char line_2[17];  // 16 characters across the display
+    //char line_2[17];  // 16 characters across the display
 
     calculateRobustMeanValue(initMeanVal, meanVal);
 
@@ -79,8 +79,8 @@ uint32_t displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, 
     return mode;
 }
 
-void updateDisplay(int32_t value){
-    SysCtlDelay (SysCtlClockGet() / value);  // Update display at ~8hz
+void updateDisplay(int32_t val) {
+    SysCtlDelay (SysCtlClockGet() / val);  // Update display at ~8hz
 }
 
 void resetHelicopterOperations(void){
@@ -90,22 +90,21 @@ void resetHelicopterOperations(void){
 
 void initializeHelicopterOperations(void){
     resetHelicopterOperations(); // resets all peripherals used in helicopter
-    
+
     initButtons(); // button setup @ buttons4.h and buttonControl.h
     initClock (); // clock setup @
     
     initADC (); // Analogue-To-Digital Conversion(s)
-    
     initDisplay (); // OLED DISPLAY
-
-    initCircBuf (&g_inBuffer, BUF_SIZE); // from @ tiva src files
-
     initYaw(); // yaw
 
     /** heliPWM.h initializations **/
     initializePWM(0); // init tail
     initializePWM(1); // init main
-    setOutputOnline(true); // set both PWM output signals online
+    setOutputOnline(0,true); // set both PWM output signals online
+    setOutputOnline(1,true); // set both PWM output signals online
+
+    initCircBuf (&g_inBuffer, BUF_SIZE); // from @ tiva src files
 }
 
 

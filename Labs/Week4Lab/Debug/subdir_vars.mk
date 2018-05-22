@@ -12,7 +12,7 @@ C_SRCS += \
 ../ADCdemo1.c \
 ../circBufT.c \
 ../tm4c123gh6pm_startup_ccs.c \
-P:/ti/TivaWare_C_Series-2.1.4.178/utils/ustdlib.c 
+E:/ti/TivaWare_C_Series-2.1.4.178/utils/ustdlib.c 
 
 C_DEPS += \
 ./ADCdemo1.d \
@@ -42,6 +42,6 @@ C_SRCS__QUOTED += \
 "../ADCdemo1.c" \
 "../circBufT.c" \
 "../tm4c123gh6pm_startup_ccs.c" \
-"P:/ti/TivaWare_C_Series-2.1.4.178/utils/ustdlib.c" 
+"E:/ti/TivaWare_C_Series-2.1.4.178/utils/ustdlib.c" 
 
 
