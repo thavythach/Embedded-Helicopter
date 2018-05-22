@@ -17,22 +17,21 @@
  *
  *
  */
-#include "ButtonControl.h"
-
+#include "Helicopter.h"
 
 //initialize static variables *************************************************************
 mode = 0;
 SW1Position = DOWN;
 
 //Functions *******************************************************************************
-int16_t yawDegreeConvert(int32_t yaw) {
-    return (int)(yaw * 0.8035714285714286);
+int16_t yawDegreeConvert(int32_t tempYaw) {
+    return (int) tempYaw * 0.8035714285714286);
 }
 
 
-void initSetPoints(int32_t yaw, uint8_t altPercent) {
+void initSetPoints(int32_t tempYaw, uint8_t altPercent) {
     setPoints.altSetPoint = altPercent;
-    setPoints.yawSetPoint = yawDegreeConvert(yaw);
+    setPoints.yawSetPoint = yawDegreeConvert(tempYaw);
 }
 
 
@@ -72,8 +71,8 @@ int16_t getYawDegreesSetPoint() {
     return setPoints.yawSetPoint;
 }
 
-void buttonControllerInit(int32_t yaw, uint8_t altPercent) {
-    initSetPoints(yaw, altPercent);
+void buttonControllerInit(int32_t tempYaw, uint8_t altPercent) {
+    initSetPoints(tempYaw, altPercent);
 }
 
 void buttonControllerLoop() {
@@ -145,10 +144,16 @@ void SW1IntHandler() {
             setSW1Mode(1)
         }
     }
+  
    //add code to landing routine part of controller that can set the mode from 2 to 0
     //or when the ref yaw is matched and current mode is zero and altitude is zero, set mode to zero(landed)
 }
 
+void CheckLanding(void){
+    if ((getSW1mode() == 2) && altitude <= 2) { // && ((ref-)) {
+        setSW1mode(0);
+    }
+}
 
 
 
