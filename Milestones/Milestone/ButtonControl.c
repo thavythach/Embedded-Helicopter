@@ -147,9 +147,16 @@ void SW1IntHandler() {
     //or when the ref yaw is matched and current mode is zero and altitude is zero, set mode to zero(landed)
 }
 
-void CheckLanding(void){
+void checkLanded(void){
     if ((getSW1mode() == 2) && altitude <= 2) { // && ((ref-)) {
         setSW1mode(0);
+    }
+}
+
+void startLanding(void){
+    if (getSW1mode() == 2){
+        setPoints.altSetPoint = 0;
+        setPoints.yawSetPoint = yawDegreeConvert(interupt_value);
     }
 }
 

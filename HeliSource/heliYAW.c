@@ -1,13 +1,11 @@
 #include "Helicopter.h"
 
-#define YawReference GPIO_PIN_4
-int i = 0; //global counter
-int interupt_value;
+int yi = 0; //global counter
 
 void yaw_ref(void){
-    i++;
+    yi++;
     interupt_value = yaw;
-    if (i == 1) {
+    if (yi == 1) {
         yaw = 0;
     }
 }

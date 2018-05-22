@@ -35,7 +35,7 @@ static circBuf_t g_inBuffer;        // Buffer of size BUF_SIZE integers (sample 
 static uint32_t g_ulSampCnt;    // Counter for the interrupts
 static int32_t yaw; 
 static uint8_t state;
-static int32_t altitude; 
+static int32_t altitude = 0;
 static int32_t deg;
 
 #define BUF_SIZE 20
@@ -43,6 +43,9 @@ static int32_t deg;
 #define RANGE_ALTITUDE 983.0
 #define sw1Pin GPIO_PIN_4 
 
+//pacer.c*******************************
+void pacerWait(void);
+//**************************************
 /** 
  * YAW @heliYAW.c
  * Global Requirements:
@@ -56,7 +59,11 @@ static int32_t deg;
 #define YAW_PERIPH_GPIO_B SYSCTL_PERIPH_GPIOB
 #define YAW_BASE_GPIO_B GPIO_PORTB_BASE
 #define YAW_SAMPLE_RATE_HZ 1792 // minimum sampling rate (1792 SAM/s = 112 slots * 4 samples/slot * 4 rev/s)
+#define YawReference GPIO_PIN_4
 
+int interupt_value;
+
+void yaw_ref(void);
 void YawIntHandler(void);
 void initYaw(void);
 
@@ -76,29 +83,6 @@ void ADCIntHandler(void);
  * Global Requirements:
  * - none
  * **/
-
-struct pwmConfig {
-	uint32_t rateMinHZ; // unused
-	uint32_t rateMaxHZ; // unused
-	uint32_t mainDutyCycle;
-	uint32_t tailDutyCycle;
-	uint32_t mainFrequency;
-	uint32_t tailFrequency;
-	uint32_t dividerCode;
-	uint32_t divider;
- };
-
-struct pwmRotor {
-	uint32_t base;
-	uint32_t gen;
-	uint32_t outnum;
-	uint32_t outbit;
-	uint32_t periphPWM;
-	uint32_t periphGPIO;
-	uint32_t GPIOBase;
-	uint32_t GPIOConfig;
-	uint8_t GPIOPin;
-};
 
 // configuration for both dreams
 
@@ -120,6 +104,7 @@ void setOutputOnline(int32_t isMainRotor, bool isOn);
 void mainProportional(uint32_t altitude);
 void tailProportional(int32_t yaw);
 double pcontrol_update ( double error , double K_P );
+void PIDController(uint32_t altitude, int32_t yaw);
 
 /**
  * Button Control @ ButtonControl.c
@@ -252,6 +237,7 @@ void initGPIOAPinChangeInterrupts(void);
 void SW1IntHandler(void);
 
 
-void CheckLanding(void);
+void checkLanded(void);
+void startLanding(void);
 
 

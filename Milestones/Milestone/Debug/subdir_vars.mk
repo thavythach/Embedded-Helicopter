@@ -18,6 +18,7 @@ E:/lab_a03_group_2/HeliSource/heliPID.c \
 E:/lab_a03_group_2/HeliSource/heliPWM.c \
 E:/lab_a03_group_2/HeliSource/heliYAW.c \
 E:/lab_a03_group_2/HeliSource/main.c \
+../pacer.c \
 ../tm4c123gh6pm_startup_ccs.c \
 C:/ti/TivaWare_C_Series-2.1.4.178/utils/ustdlib.c 
 
@@ -31,6 +32,7 @@ C_DEPS += \
 ./heliPWM.d \
 ./heliYAW.d \
 ./main.d \
+./pacer.d \
 ./tm4c123gh6pm_startup_ccs.d \
 ./ustdlib.d 
 
@@ -44,6 +46,7 @@ OBJS += \
 ./heliPWM.obj \
 ./heliYAW.obj \
 ./main.obj \
+./pacer.obj \
 ./tm4c123gh6pm_startup_ccs.obj \
 ./ustdlib.obj 
 
@@ -57,6 +60,7 @@ OBJS__QUOTED += \
 "heliPWM.obj" \
 "heliYAW.obj" \
 "main.obj" \
+"pacer.obj" \
 "tm4c123gh6pm_startup_ccs.obj" \
 "ustdlib.obj" 
 
@@ -70,6 +74,7 @@ C_DEPS__QUOTED += \
 "heliPWM.d" \
 "heliYAW.d" \
 "main.d" \
+"pacer.d" \
 "tm4c123gh6pm_startup_ccs.d" \
 "ustdlib.d" 
 
@@ -83,6 +88,7 @@ C_SRCS__QUOTED += \
 "E:/lab_a03_group_2/HeliSource/heliPWM.c" \
 "E:/lab_a03_group_2/HeliSource/heliYAW.c" \
 "E:/lab_a03_group_2/HeliSource/main.c" \
+"../pacer.c" \
 "../tm4c123gh6pm_startup_ccs.c" \
 "C:/ti/TivaWare_C_Series-2.1.4.178/utils/ustdlib.c" 
 

@@ -38,6 +38,7 @@ void calculateRobustMeanValue(uint32_t initMeanVal, uint32_t meanVal){
 
 /**
  * Function to display the mean ADC value (10-bit value, note) and sample count.
+ *
  */
 uint32_t displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t mode){
     char string[17];  // 16 characters across the display
@@ -103,7 +104,7 @@ void initializeHelicopterOperations(void){
     initializePWM(1); // init main
     setOutputOnline(0,true); // set both PWM output signals online
     setOutputOnline(1,true); // set both PWM output signals online
-
+    SW1setup();
     initCircBuf (&g_inBuffer, BUF_SIZE); // from @ tiva src files
 }
 
