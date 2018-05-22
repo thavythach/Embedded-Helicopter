@@ -13,6 +13,7 @@
 #include "driverlib/debug.h"
 #include "utils/ustdlib.h"
 #include "driverlib/pin_map.h" //Needed for pin configure
+#include "driverlib/uart.h"
 
 
 /** LIBRARIES | ENCE361 **/
@@ -43,6 +44,29 @@ static int32_t deg;
 #define RANGE_ALTITUDE 983.0
 #define sw1Pin GPIO_PIN_4 
 
+
+
+
+//UART.c***********************************
+#define BAUD_RATE 9600
+#define UART_USB_BASE           UART0_BASE
+#define UART_USB_PERIPH_UART    SYSCTL_PERIPH_UART0
+#define UART_USB_PERIPH_GPIO    SYSCTL_PERIPH_GPIOA
+#define UART_USB_GPIO_BASE      GPIO_PORTA_BASE
+#define UART_USB_GPIO_PIN_RX    GPIO_PIN_0
+#define UART_USB_GPIO_PIN_TX    GPIO_PIN_1
+#define UART_USB_GPIO_PINS      UART_USB_GPIO_PIN_RX | UART_USB_GPIO_PIN_TX
+#define SYSTICK_RATE_HZ 100 //???
+#define SLOWTICK_RATE_HZ 4
+
+volatile uint8_t slowTick; //false initially, cant initialize in header? why??
+
+void initialiseUSB_UART (void);
+void UARTSend (char *string);
+char * getSW1modeString(int32_t mode);
+void UART();
+
+//******************************************
 //pacer.c*******************************
 void pacerWait(void);
 //**************************************

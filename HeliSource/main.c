@@ -31,11 +31,13 @@ int main(void){
         if ( getSW1mode() == 1 ){
             buttonControllerLoop();
         }
-
+        //PID Motor control code
         PIDController(altitude, yawDegreeConvert(yaw));
         checkLanded();
         startLanding();
 
+        //UART code
+        UART();
         // Update Display by 8Hz
         updateDisplay(96);
     }

@@ -6,6 +6,18 @@ void SysTickIntHandler(void){
     ADCProcessorTrigger(ADC0_BASE, 3); 
     g_ulSampCnt++;
     updateButtons();
+
+    //UART************************************
+    static uint8_t tickCount = 0;
+    const uint8_t ticksPerSlow = SYSTICK_RATE_HZ / SLOWTICK_RATE_HZ;
+
+    //updateButtons ();     // Poll the buttons
+    if (++tickCount >= ticksPerSlow)
+    {                       // Signal a slow tick
+        tickCount = 0;
+        slowTick = true;
+    }
+    //********************************************
 }
 
 // Initialisation functions for the clock (incl. SysTick), ADC, display
@@ -106,6 +118,7 @@ void initializeHelicopterOperations(void){
     setOutputOnline(1,true); // set both PWM output signals online
     SW1setup();
     initCircBuf (&g_inBuffer, BUF_SIZE); // from @ tiva src files
+    initialiseUSB_UART();
 }
 
 

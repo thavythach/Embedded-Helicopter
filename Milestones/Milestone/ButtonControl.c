@@ -140,6 +140,8 @@ void SW1IntHandler() {
         }
         if (getSW1Position()) {
             setSW1mode(1);
+            setOutputOnline(0,true); // set both PWM output signals online
+            setOutputOnline(1,true); // set both PWM output signals online
         }
     }
   
@@ -149,6 +151,8 @@ void SW1IntHandler() {
 
 void checkLanded(void){
     if ((getSW1mode() == 2) && altitude <= 2) { // && ((ref-)) {
+        setOutputOnline(0,false); // set both PWM output signals online
+        setOutputOnline(1,false); // set both PWM output signals online
         setSW1mode(0);
     }
 }

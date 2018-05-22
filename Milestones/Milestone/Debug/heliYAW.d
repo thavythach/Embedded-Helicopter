@@ -20,6 +20,7 @@ heliYAW.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/time.h
 heliYAW.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/linkage.h
 heliYAW.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/abi_prefix.h
 heliYAW.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h
+heliYAW.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h
 heliYAW.obj: E:/lab_a03_group_2/Milestones/Milestone/circBufT.h
 heliYAW.obj: E:/lab_a03_group_2/Milestones/Milestone/OrbitOLED/OrbitOLEDInterface.h
 heliYAW.obj: P:/lab_a03_group_2/Dependencies/buttons4.h
@@ -44,6 +45,7 @@ C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/time.h:
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/linkage.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/abi_prefix.h: 
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h: 
+C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h: 
 E:/lab_a03_group_2/Milestones/Milestone/circBufT.h: 
 E:/lab_a03_group_2/Milestones/Milestone/OrbitOLED/OrbitOLEDInterface.h: 
 P:/lab_a03_group_2/Dependencies/buttons4.h: 
