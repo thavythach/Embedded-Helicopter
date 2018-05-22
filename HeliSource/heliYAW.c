@@ -1,17 +1,50 @@
 #include "Helicopter.h"
 
+#define YawReference GPIO_PIN_4
+int i = 0; //global counter
+int interupt_value;
+
+void yaw_ref(void){
+    i++;
+    interupt_value = yaw;
+    if (i == 1) {
+        yaw = 0;
+    }
+}
+
 /**
  * Enable the GPIOB peripheral
  */
 void initYaw(void){
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB); // Enable the GPIOB peripheral
-    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOB)){} // Wait for the GPIOB module to be ready
-    GPIOIntRegister(GPIO_PORTB_BASE, YawIntHandler); // register YawIntHandler
+    // Enable the GPIOB peripheral
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
+
+    /**Wait for the GPIOB module to be ready**/
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOB)){
+    }
+
+    /**Wait for the GPIOC module to be ready**/
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOC)){
+    }
+
+    GPIOIntRegister(GPIO_PORTB_BASE, YawIntHandler);
+    GPIOIntRegister(GPIO_PORTC_BASE, yaw_ref);
 
     /**Initialize the GPIO pin configuration**/
-    GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, CHANNEL_A_PIN | CHANNEL_B_PIN); // sets pin 0, 1 as in put, SW controlled.
-    GPIOIntTypeSet(GPIO_PORTB_BASE, CHANNEL_A_PIN | CHANNEL_B_PIN, GPIO_BOTH_EDGES); // makes pins 0 and 1 rising edge triggered interrupts
-    GPIOIntEnable(GPIO_PORTB_BASE, CHANNEL_A_PIN | CHANNEL_B_PIN); // Enable the pin interrupts
+
+    // sets pin 0, 1 as in put, SW controlled.
+    GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, CHANNEL_A_PIN | CHANNEL_B_PIN);
+    GPIOPinTypeGPIOInput(GPIO_PORTC_BASE, YawReference);
+
+
+    // makes pins 0 and 1 rising edge triggered interrupts
+    GPIOIntTypeSet(GPIO_PORTB_BASE, CHANNEL_A_PIN | CHANNEL_B_PIN, GPIO_BOTH_EDGES);
+    GPIOIntTypeSet(GPIO_PORTC_BASE, YawReference, GPIO_BOTH_EDGES);
+
+    // Enable the pin interrupts
+    GPIOIntEnable(GPIO_PORTB_BASE, CHANNEL_A_PIN | CHANNEL_B_PIN);
+    GPIOIntEnable(GPIO_PORTC_BASE, YawReference);
 }
 
 void YawIntHandler(void){
