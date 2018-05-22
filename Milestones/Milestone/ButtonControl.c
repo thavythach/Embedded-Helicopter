@@ -19,6 +19,12 @@
  */
 #include "ButtonControl.h"
 
+
+//initialize static variables *************************************************************
+mode = 0;
+SW1Position = DOWN;
+
+//Functions *******************************************************************************
 int16_t yawDegreeConvert(int32_t yaw) {
     return (int)(yaw * 0.8035714285714286);
 }
@@ -62,15 +68,8 @@ int32_t getAltitudePercentSetPoint() {
     return setPoints.altSetPoint;
 }
 
-int8_t getYawDegreesSetPoint() {
+int16_t getYawDegreesSetPoint() {
     return setPoints.yawSetPoint;
-}
-
-void resetPeriphButtons(void){
-    SysCtlPeripheralReset (UP_BUT_PERIPH);        // UP button GPIO
-    SysCtlPeripheralReset (DOWN_BUT_PERIPH);      // DOWN button GPIO
-    SysCtlPeripheralReset (RIGHT_BUT_PERIPH);      // RIGHT button GPIO
-    SysCtlPeripheralReset (LEFT_BUT_PERIPH);      // LEFT button GPIO
 }
 
 void buttonControllerInit(int32_t yaw, uint8_t altPercent) {
@@ -84,6 +83,71 @@ void buttonControllerLoop() {
     checkAndDecrementYaw();
 }
 
+void SW1setup() {
+    SysCtlPeripheralEnable (SW1_PORT);
+       GPIOPinTypeGPIOInput (SW1_, UP_BUT_PIN);
+       GPIOPadConfigSet (SW1_PORT_BASE, SW1_PIN, GPIO_STRENGTH_2MA,
+          GPIO_PIN_TYPE_STD_WPD); //pull up or pull down??
+
+}
+
+uint8_t getSW1Position() {
+    uint8_t SW1State = GPIOPinRead(SW1_PORT_BASE, SW1_PIN);
+    return SW1State;
+}
+
+void setSW1mode(int8_t newMode) {
+    mode = newMode;
+}
+
+uint8_t getSW1mode() {
+    return mode;
+}
+
+void resetPeriphButtons(void){
+    SysCtlPeripheralReset (UP_BUT_PERIPH);        // UP button GPIO
+    SysCtlPeripheralReset (DOWN_BUT_PERIPH);      // DOWN button GPIO
+    SysCtlPeripheralReset (RIGHT_BUT_PERIPH);      // RIGHT button GPIO
+    SysCtlPeripheralReset (LEFT_BUT_PERIPH);      // LEFT button GPIO
+}
+
+void initGPIOAPinChangeInterrupts(void){
+
+
+    // Enable the GPIOA peripheral
+    SysCtlPeripheralEnable(SW1_PORT);
+
+    /**Wait for the GPIOA module to be ready**/
+    while(!SysCtlPeripheralReady(SW1_Port)){
+    }
+
+    GPIOIntRegister(SW1_PORT, SW1IntHandler);
+
+    /**Initialize the GPIO pin configuration**/
+
+    // sets pin 0, 1 as in put, SW controlled.
+    GPIOPinTypeGPIOInput(SW1_PORT, SW1_PIN);
+
+
+    // makes sw1 pin rising and falling edge triggered interrupt
+    GPIOIntTypeSet(SW1_PORT, SW1_PIN, GPIO_BOTH_EDGES);
+
+    // Enable the sw1 pin interrupt
+    GPIOIntEnable(SW1_PORT, SW1_PIN);
+}
+
+void SW1IntHandler() {
+    if (getSW1Mode() != 2) {
+        if ((getSW1Mode() == 1) && !getSW1Position()) {
+            setSW1Mode(2);
+        }
+        if (getSW1Position()) {
+            setSW1Mode(1)
+        }
+    }
+   //add code to landing routine part of controller that can set the mode from 2 to 0
+    //or when the ref yaw is matched and current mode is zero and altitude is zero, set mode to zero(landed)
+}
 
 
 

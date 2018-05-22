@@ -1,8 +1,5 @@
 #include "Helicopter.h"
 
-
-
-
 int main(void){
     uint16_t i; // use: circBuffer
     int32_t isHeightInitialized = 0; // use: init height
