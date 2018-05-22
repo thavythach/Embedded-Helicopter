@@ -38,6 +38,7 @@ int main(void){
 
         //UART code
         UART();
+
         // Update Display by 8Hz
         updateDisplay(96);
     }

@@ -1,7 +1,7 @@
 ******************************************************************************
                   TI ARM Linker PC v16.9.6                     
 ******************************************************************************
->> Linked Tue May 22 23:29:45 2018
+>> Linked Wed May 23 09:49:30 2018
 
 OUTPUT FILE NAME:   <Milestone.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 000039a9
@@ -51,7 +51,7 @@ section   page    origin      length       input sections
                   00002644    00000204     OrbitOledChar.obj (.text)
                   00002848    000001f4     heliYAW.obj (.text)
                   00002a3c    000001a4     heliPWM.obj (.text)
-                  00002be0    00000188     UART.obj (.text)
+                  00002be0    00000188     heliUART.obj (.text)
                   00002d68    00000136     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_div_t2.obj (.text)
                   00002e9e    00000132     driverlib.lib : gpio.obj (.text:GPIOPadConfigSet)
                   00002fd0    00000110                   : sysctl.obj (.text:SysCtlClockGet)
@@ -182,14 +182,14 @@ section   page    origin      length       input sections
                   200005a4    00000008     main.obj (.bss)
                   200005ac    00000008     (.common:setPoints)
                   200005b4    00000005     heliYAW.obj (.bss)
-                  200005b9    00000001     (.common:clrOledCur)
-                  200005ba    00000001     (.common:slowTick)
-                  200005bb    00000001     --HOLE--
-                  200005bc    00000004     UART.obj (.bss)
-                  200005c0    00000004     buttons4.obj (.bss:but_count)
-                  200005c4    00000004     buttons4.obj (.bss:but_flag)
-                  200005c8    00000004     buttons4.obj (.bss:but_normal)
-                  200005cc    00000004     buttons4.obj (.bss:but_state)
+                  200005b9    00000004     buttons4.obj (.bss:but_count)
+                  200005bd    00000004     buttons4.obj (.bss:but_flag)
+                  200005c1    00000004     buttons4.obj (.bss:but_normal)
+                  200005c5    00000004     buttons4.obj (.bss:but_state)
+                  200005c9    00000001     (.common:clrOledCur)
+                  200005ca    00000001     (.common:slowTick)
+                  200005cb    00000001     --HOLE--
+                  200005cc    00000004     heliUART.obj (.bss)
                   200005d0    00000004     (.common:bnOledCur)
                   200005d4    00000004     (.common:dxcoOledFontCur)
                   200005d8    00000004     (.common:dycoOledFontCur)
@@ -224,7 +224,7 @@ section   page    origin      length       input sections
                   20000a45    00000003     --HOLE--
                   20000a48    00000005     Helicopter.obj (.data)
                   20000a4d    00000003     --HOLE--
-                  20000a50    00000004     UART.obj (.data)
+                  20000a50    00000004     heliUART.obj (.data)
                   20000a54    00000004     heliYAW.obj (.data)
                   20000a58    00000004     main.obj (.data)
                   20000a5c    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : stkdepth_vars.obj (.data)
@@ -242,7 +242,7 @@ MODULE SUMMARY
        buttons4.obj                   544     0         16     
        heliYAW.obj                    500     0         9      
        heliPWM.obj                    420     0         8      
-       UART.obj                       392     0         8      
+       heliUART.obj                   392     0         8      
        main.obj                       224     0         28     
        heliPID.obj                    240     0         0      
        circBufT.obj                   184     0         0      
@@ -517,7 +517,7 @@ ffffffff  binit
 0000226b  checkAndIncrementYaw           
 000025c7  checkButton                    
 000023ad  checkLanded                    
-200005b9  clrOledCur                     
+200005c9  clrOledCur                     
 00003b8d  copy_in                        
 0000203b  displayMeanVal                 
 200005d4  dxcoOledFontCur                
@@ -576,7 +576,7 @@ ffffffff  binit
 00002a3d  setPWMClocks                   
 200005ac  setPoints                      
 00002305  setSW1mode                     
-200005ba  slowTick                       
+200005ca  slowTick                       
 000023d7  startLanding                   
 00003321  tailProportional               
 20000a3c  tail_duty                      
@@ -847,8 +847,8 @@ address   name
 2000026c  rgbOledBmp                     
 2000046c  rgbOledFontUser                
 200005ac  setPoints                      
-200005b9  clrOledCur                     
-200005ba  slowTick                       
+200005c9  clrOledCur                     
+200005ca  slowTick                       
 200005d0  bnOledCur                      
 200005d4  dxcoOledFontCur                
 200005d8  dycoOledFontCur                

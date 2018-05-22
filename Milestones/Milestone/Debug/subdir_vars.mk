@@ -11,12 +11,12 @@ CMD_SRCS += \
 C_SRCS += \
 ../ButtonControl.c \
 ../Helicopter.c \
-../UART.c \
 P:/lab_a03_group_2/Dependencies/buttons4.c \
 ../circBufT.c \
 E:/lab_a03_group_2/HeliSource/heliADC.c \
 E:/lab_a03_group_2/HeliSource/heliPID.c \
 E:/lab_a03_group_2/HeliSource/heliPWM.c \
+../heliUART.c \
 E:/lab_a03_group_2/HeliSource/heliYAW.c \
 E:/lab_a03_group_2/HeliSource/main.c \
 ../pacer.c \
@@ -26,12 +26,12 @@ C:/ti/TivaWare_C_Series-2.1.4.178/utils/ustdlib.c
 C_DEPS += \
 ./ButtonControl.d \
 ./Helicopter.d \
-./UART.d \
 ./buttons4.d \
 ./circBufT.d \
 ./heliADC.d \
 ./heliPID.d \
 ./heliPWM.d \
+./heliUART.d \
 ./heliYAW.d \
 ./main.d \
 ./pacer.d \
@@ -41,12 +41,12 @@ C_DEPS += \
 OBJS += \
 ./ButtonControl.obj \
 ./Helicopter.obj \
-./UART.obj \
 ./buttons4.obj \
 ./circBufT.obj \
 ./heliADC.obj \
 ./heliPID.obj \
 ./heliPWM.obj \
+./heliUART.obj \
 ./heliYAW.obj \
 ./main.obj \
 ./pacer.obj \
@@ -56,12 +56,12 @@ OBJS += \
 OBJS__QUOTED += \
 "ButtonControl.obj" \
 "Helicopter.obj" \
-"UART.obj" \
 "buttons4.obj" \
 "circBufT.obj" \
 "heliADC.obj" \
 "heliPID.obj" \
 "heliPWM.obj" \
+"heliUART.obj" \
 "heliYAW.obj" \
 "main.obj" \
 "pacer.obj" \
@@ -71,12 +71,12 @@ OBJS__QUOTED += \
 C_DEPS__QUOTED += \
 "ButtonControl.d" \
 "Helicopter.d" \
-"UART.d" \
 "buttons4.d" \
 "circBufT.d" \
 "heliADC.d" \
 "heliPID.d" \
 "heliPWM.d" \
+"heliUART.d" \
 "heliYAW.d" \
 "main.d" \
 "pacer.d" \
@@ -86,12 +86,12 @@ C_DEPS__QUOTED += \
 C_SRCS__QUOTED += \
 "../ButtonControl.c" \
 "../Helicopter.c" \
-"../UART.c" \
 "P:/lab_a03_group_2/Dependencies/buttons4.c" \
 "../circBufT.c" \
 "E:/lab_a03_group_2/HeliSource/heliADC.c" \
 "E:/lab_a03_group_2/HeliSource/heliPID.c" \
 "E:/lab_a03_group_2/HeliSource/heliPWM.c" \
+"../heliUART.c" \
 "E:/lab_a03_group_2/HeliSource/heliYAW.c" \
 "E:/lab_a03_group_2/HeliSource/main.c" \
 "../pacer.c" \

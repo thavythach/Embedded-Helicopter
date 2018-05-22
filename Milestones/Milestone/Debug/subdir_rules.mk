@@ -19,13 +19,6 @@ Helicopter.obj: ../Helicopter.c $(GEN_OPTS) | $(GEN_HDRS)
 	@echo 'Finished building: "$<"'
 	@echo ' '
 
-UART.obj: ../UART.c $(GEN_OPTS) | $(GEN_HDRS)
-	@echo 'Building file: "$<"'
-	@echo 'Invoking: ARM Compiler'
-	"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="E:/lab_a03_group_2/Milestones/Milestone" --include_path="E:/lab_a03_group_2/Milestones/Milestone" --include_path="C:/ti/TivaWare_C_Series-2.1.4.178" --include_path="P:/lab_a03_group_2/Dependencies" --include_path="C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include" --define=ccs="ccs" --define=PART_TM4C123GH6PM -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi --preproc_with_compile --preproc_dependency="UART.d_raw" $(GEN_OPTS__FLAG) "$<"
-	@echo 'Finished building: "$<"'
-	@echo ' '
-
 buttons4.obj: P:/lab_a03_group_2/Dependencies/buttons4.c $(GEN_OPTS) | $(GEN_HDRS)
 	@echo 'Building file: "$<"'
 	@echo 'Invoking: ARM Compiler'
@@ -58,6 +51,13 @@ heliPWM.obj: E:/lab_a03_group_2/HeliSource/heliPWM.c $(GEN_OPTS) | $(GEN_HDRS)
 	@echo 'Building file: "$<"'
 	@echo 'Invoking: ARM Compiler'
 	"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="E:/lab_a03_group_2/Milestones/Milestone" --include_path="E:/lab_a03_group_2/Milestones/Milestone" --include_path="C:/ti/TivaWare_C_Series-2.1.4.178" --include_path="P:/lab_a03_group_2/Dependencies" --include_path="C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include" --define=ccs="ccs" --define=PART_TM4C123GH6PM -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi --preproc_with_compile --preproc_dependency="heliPWM.d_raw" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: "$<"'
+	@echo ' '
+
+heliUART.obj: ../heliUART.c $(GEN_OPTS) | $(GEN_HDRS)
+	@echo 'Building file: "$<"'
+	@echo 'Invoking: ARM Compiler'
+	"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="E:/lab_a03_group_2/Milestones/Milestone" --include_path="E:/lab_a03_group_2/Milestones/Milestone" --include_path="C:/ti/TivaWare_C_Series-2.1.4.178" --include_path="P:/lab_a03_group_2/Dependencies" --include_path="C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include" --define=ccs="ccs" --define=PART_TM4C123GH6PM -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi --preproc_with_compile --preproc_dependency="heliUART.d_raw" $(GEN_OPTS__FLAG) "$<"
 	@echo 'Finished building: "$<"'
 	@echo ' '
 
