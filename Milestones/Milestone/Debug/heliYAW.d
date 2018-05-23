@@ -23,7 +23,7 @@ heliYAW.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h
 heliYAW.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h
 heliYAW.obj: E:/lab_a03_group_2/Milestones/Milestone/circBufT.h
 heliYAW.obj: E:/lab_a03_group_2/Milestones/Milestone/OrbitOLED/OrbitOLEDInterface.h
-heliYAW.obj: P:/lab_a03_group_2/Dependencies/buttons4.h
+heliYAW.obj: E:/lab_a03_group_2/Dependencies/buttons4.h
 
 E:/lab_a03_group_2/HeliSource/heliYAW.c: 
 E:/lab_a03_group_2/Milestones/Milestone/Helicopter.h: 
@@ -48,4 +48,4 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h:
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h: 
 E:/lab_a03_group_2/Milestones/Milestone/circBufT.h: 
 E:/lab_a03_group_2/Milestones/Milestone/OrbitOLED/OrbitOLEDInterface.h: 
-P:/lab_a03_group_2/Dependencies/buttons4.h: 
+E:/lab_a03_group_2/Dependencies/buttons4.h: 

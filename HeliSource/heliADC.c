@@ -1,6 +1,6 @@
 // might need to add tiva source files
 
-#include "helicopter.h"
+#include "Helicopter.h"
 
 void initADC (void){
     // The ADC0 peripheral must be enabled for configuration and use.

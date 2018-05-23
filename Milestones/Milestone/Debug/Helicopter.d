@@ -23,7 +23,7 @@ Helicopter.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h
 Helicopter.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h
 Helicopter.obj: ../circBufT.h
 Helicopter.obj: ../OrbitOLED/OrbitOLEDInterface.h
-Helicopter.obj: P:/lab_a03_group_2/Dependencies/buttons4.h
+Helicopter.obj: E:/lab_a03_group_2/Dependencies/buttons4.h
 
 ../Helicopter.c: 
 ../Helicopter.h: 
@@ -48,4 +48,4 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h:
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h: 
 ../circBufT.h: 
 ../OrbitOLED/OrbitOLEDInterface.h: 
-P:/lab_a03_group_2/Dependencies/buttons4.h: 
+E:/lab_a03_group_2/Dependencies/buttons4.h: 

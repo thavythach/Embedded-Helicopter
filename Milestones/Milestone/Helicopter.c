@@ -1,5 +1,12 @@
 #include "Helicopter.h"
 
+circBuf_t g_inBuffer;        // Buffer of size BUF_SIZE integers (sample values)
+volatile uint32_t g_ulSampCnt;    // Counter for the interrupts
+volatile int32_t yaw;
+volatile uint8_t state;
+volatile int16_t altitude;
+
+
 // The interrupt handler for the for SysTick interrupt.
 void SysTickIntHandler(void){
     // Initiate a conversion
@@ -36,8 +43,9 @@ void initClock (void){
     setPWMClocks();
     
     // Enable interrupt and device
-    SysTickIntEnable();
+
     SysTickEnable();
+    SysTickIntEnable();
 }
 
 void initDisplay (void){
@@ -61,7 +69,7 @@ void displayMeanVal(uint16_t meanVal, uint16_t initMeanVal){
     // Displaying Title and conditional string denoting which mode
         usnprintf (line, sizeof(line), "Alt %% = %3d ", altitude);
         OLEDStringDraw (line, 0, 0); // meanvalue display
-        usnprintf (line, sizeof(line), "YAW = %5d", yaw);
+        usnprintf (line, sizeof(line), "YAW = %5d", yawDegreeConvert(yaw));
         OLEDStringDraw (line, 0, 1); // yaw display
         usnprintf (line, sizeof(line), "M Duty: %3d", main_duty);
         OLEDStringDraw (line, 0, 2); // main motor duty cycle in %
@@ -85,10 +93,7 @@ void initializeHelicopterOperations(void){
     initClock (); // clock setup @
     initButtons(); // button setup @ buttons4.h and buttonControl.h
 
-    
     initADC (); // Analogue-To-Digital Conversion(s)
-
-
 
     /** heliPWM.h initializations **/
     initializePWM(0); // init tail

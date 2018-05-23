@@ -1,7 +1,7 @@
 # FIXED
 
 heliADC.obj: E:/lab_a03_group_2/HeliSource/heliADC.c
-heliADC.obj: E:/lab_a03_group_2/Milestones/Milestone/helicopter.h
+heliADC.obj: E:/lab_a03_group_2/Milestones/Milestone/Helicopter.h
 heliADC.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdint.h
 heliADC.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdbool.h
 heliADC.obj: C:/ti/TivaWare_C_Series-2.1.4.178/inc/hw_memmap.h
@@ -23,10 +23,10 @@ heliADC.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h
 heliADC.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h
 heliADC.obj: E:/lab_a03_group_2/Milestones/Milestone/circBufT.h
 heliADC.obj: E:/lab_a03_group_2/Milestones/Milestone/OrbitOLED/OrbitOLEDInterface.h
-heliADC.obj: P:/lab_a03_group_2/Dependencies/buttons4.h
+heliADC.obj: E:/lab_a03_group_2/Dependencies/buttons4.h
 
 E:/lab_a03_group_2/HeliSource/heliADC.c: 
-E:/lab_a03_group_2/Milestones/Milestone/helicopter.h: 
+E:/lab_a03_group_2/Milestones/Milestone/Helicopter.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdint.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdbool.h: 
 C:/ti/TivaWare_C_Series-2.1.4.178/inc/hw_memmap.h: 
@@ -48,4 +48,4 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h:
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h: 
 E:/lab_a03_group_2/Milestones/Milestone/circBufT.h: 
 E:/lab_a03_group_2/Milestones/Milestone/OrbitOLED/OrbitOLEDInterface.h: 
-P:/lab_a03_group_2/Dependencies/buttons4.h: 
+E:/lab_a03_group_2/Dependencies/buttons4.h: 

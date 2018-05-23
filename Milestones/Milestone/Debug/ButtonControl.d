@@ -23,7 +23,7 @@ ButtonControl.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h
 ButtonControl.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h
 ButtonControl.obj: ../circBufT.h
 ButtonControl.obj: ../OrbitOLED/OrbitOLEDInterface.h
-ButtonControl.obj: P:/lab_a03_group_2/Dependencies/buttons4.h
+ButtonControl.obj: E:/lab_a03_group_2/Dependencies/buttons4.h
 
 ../ButtonControl.c: 
 ../Helicopter.h: 
@@ -48,4 +48,4 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h:
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h: 
 ../circBufT.h: 
 ../OrbitOLED/OrbitOLEDInterface.h: 
-P:/lab_a03_group_2/Dependencies/buttons4.h: 
+E:/lab_a03_group_2/Dependencies/buttons4.h: 

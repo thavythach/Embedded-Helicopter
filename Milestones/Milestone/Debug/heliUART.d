@@ -23,7 +23,7 @@ heliUART.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h
 heliUART.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h
 heliUART.obj: ../circBufT.h
 heliUART.obj: ../OrbitOLED/OrbitOLEDInterface.h
-heliUART.obj: P:/lab_a03_group_2/Dependencies/buttons4.h
+heliUART.obj: E:/lab_a03_group_2/Dependencies/buttons4.h
 
 ../heliUART.c: 
 ../Helicopter.h: 
@@ -48,4 +48,4 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h:
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h: 
 ../circBufT.h: 
 ../OrbitOLED/OrbitOLEDInterface.h: 
-P:/lab_a03_group_2/Dependencies/buttons4.h: 
+E:/lab_a03_group_2/Dependencies/buttons4.h: 

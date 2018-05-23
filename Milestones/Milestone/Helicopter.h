@@ -30,14 +30,14 @@ void initializeHelicopterOperations(void);
 void resetHelicopterOperations(void);
 void calculateRobustMeanValue(uint16_t initMeanVal, uint16_t meanVal);
 
-static circBuf_t g_inBuffer;        // Buffer of size BUF_SIZE integers (sample values)
-static uint32_t g_ulSampCnt;    // Counter for the interrupts
-static int32_t yaw; 
-static uint8_t state;
-static int16_t altitude;
+extern circBuf_t g_inBuffer;        // Buffer of size BUF_SIZE integers (sample values)
+extern volatile uint32_t g_ulSampCnt;    // Counter for the interrupts
+extern volatile int32_t yaw;
+extern volatile uint8_t state;
+extern volatile int16_t altitude;
 //static int32_t deg;
 
-#define BUF_SIZE 20
+#define BUF_SIZE 10
 #define SAMPLE_RATE_HZ 100 // equation for it... 2*buffsize*fmax (2*10*4)
 #define sw1Pin GPIO_PIN_4 
 

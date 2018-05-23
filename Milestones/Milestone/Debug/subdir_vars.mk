@@ -11,7 +11,7 @@ CMD_SRCS += \
 C_SRCS += \
 ../ButtonControl.c \
 ../Helicopter.c \
-P:/lab_a03_group_2/Dependencies/buttons4.c \
+E:/lab_a03_group_2/Dependencies/buttons4.c \
 ../circBufT.c \
 E:/lab_a03_group_2/HeliSource/heliADC.c \
 E:/lab_a03_group_2/HeliSource/heliPID.c \
@@ -86,7 +86,7 @@ C_DEPS__QUOTED += \
 C_SRCS__QUOTED += \
 "../ButtonControl.c" \
 "../Helicopter.c" \
-"P:/lab_a03_group_2/Dependencies/buttons4.c" \
+"E:/lab_a03_group_2/Dependencies/buttons4.c" \
 "../circBufT.c" \
 "E:/lab_a03_group_2/HeliSource/heliADC.c" \
 "E:/lab_a03_group_2/HeliSource/heliPID.c" \
