@@ -44,52 +44,31 @@ void initDisplay (void){
     OLEDInitialise (); // intialise the Orbit OLED display
 }
 
-void calculateRobustMeanValue(uint32_t initMeanVal, uint32_t meanVal){
-    altitude = (( ((float)initMeanVal) - ((float) meanVal) ) / RANGE_ALTITUDE) * 100;
-    }
+void calculateRobustMeanValue(uint16_t initMeanVal, uint16_t meanVal){
+    float range_altitude = 983.0;
+    altitude = (( ((float)initMeanVal) - ((float) meanVal) ) / range_altitude) * 100;
+}
 
 /**
  * Function to display the mean ADC value (10-bit value, note) and sample count.
  *
  */
-uint32_t displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t mode){
-    char string[17];  // 16 characters across the display
-    char strins[17];  // 16 characters across the display
-    //char line_2[17];  // 16 characters across the display
-    //char line_2[17];  // 16 characters across the display
+void displayMeanVal(uint16_t meanVal, uint16_t initMeanVal){
+    char line[17];  // 16 characters across the display
 
     calculateRobustMeanValue(initMeanVal, meanVal);
 
-    // Up Button Functionality to determine new mode to display.
-    if (checkButton(UP) == PUSHED) {
-        if (mode == 2) mode = 0;
-        else mode += 1;
-    }
-
-    switch (mode){
-        case 1: // Chaneg Altitude to 
-            usnprintf (string, sizeof(string), "Mean ADC = %4d ", meanVal);
-            break;
-        case 2: // clear oled screen
-            OLEDStringDraw ("                ", 0, 0);
-            OLEDStringDraw ("                ", 0, 1);
-            OLEDStringDraw ("                ", 0, 2);
-            OLEDStringDraw ("                ", 0, 3);
-            break;
-        default:
-            usnprintf (string, sizeof(string), "Alt %% = %4d ", altitude);
-            break;
-    }
-
     // Displaying Title and conditional string denoting which mode
-    if ( mode != 2 ){
-        OLEDStringDraw ("Milestone 2", 0, 0); // milestone display
-        OLEDStringDraw (string, 0, 1); // meanvalue display
-        usnprintf (strins, sizeof(strins), "YAW deg = %5d", yawDegreeConvert(yaw));
-        OLEDStringDraw (strins, 0, 2); // yaw display
-    }
+        usnprintf (line, sizeof(line), "Alt %% = %3d ", altitude);
+        OLEDStringDraw (line, 0, 0); // meanvalue display
+        usnprintf (line, sizeof(line), "YAW = %5d", yaw);
+        OLEDStringDraw (line, 0, 1); // yaw display
+        usnprintf (line, sizeof(line), "M Duty: %3d", main_duty);
+        OLEDStringDraw (line, 0, 2); // main motor duty cycle in %
+        usnprintf (line, sizeof(line), "T Duty: %3d", tail_duty);
+        OLEDStringDraw (line, 0, 3); // tail motor duty cycle in %
 
-    return mode;
+
 }
 
 void updateDisplay(int32_t val) {
@@ -103,22 +82,25 @@ void resetHelicopterOperations(void){
 
 void initializeHelicopterOperations(void){
     resetHelicopterOperations(); // resets all peripherals used in helicopter
-
-    initButtons(); // button setup @ buttons4.h and buttonControl.h
     initClock (); // clock setup @
+    initButtons(); // button setup @ buttons4.h and buttonControl.h
+
     
     initADC (); // Analogue-To-Digital Conversion(s)
-    initDisplay (); // OLED DISPLAY
-    initYaw(); // yaw
+
+
 
     /** heliPWM.h initializations **/
     initializePWM(0); // init tail
     initializePWM(1); // init main
-    setOutputOnline(0,true); // set both PWM output signals online
-    setOutputOnline(1,true); // set both PWM output signals online
+  //  setOutputOnline(0,true); // set both PWM output signals online
+  //  setOutputOnline(1,true); // set both PWM output signals online
     SW1setup();
     initCircBuf (&g_inBuffer, BUF_SIZE); // from @ tiva src files
+    initYaw(); // yaw
+    buttonControllerInit(yawDegreeConvert(yaw), altitude);
     initialiseUSB_UART();
+    initDisplay (); // OLED DISPLAY
 }
 
 

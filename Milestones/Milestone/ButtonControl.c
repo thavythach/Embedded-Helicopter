@@ -23,7 +23,7 @@
 
 //Functions *******************************************************************************
 int16_t yawDegreeConvert(int32_t tempYaw) {
-    return ((int) tempYaw * 0.8035714285714286);
+    return (int)(((float)tempYaw) * 0.8035714285714286);
 }
 
 
@@ -69,8 +69,9 @@ int16_t getYawDegreesSetPoint() {
     return setPoints.yawSetPoint;
 }
 
-void buttonControllerInit(int32_t tempYaw, uint8_t altPercent) {
+void buttonControllerInit(int32_t tempYaw, int16_t altPercent) {
     initSetPoints(tempYaw, altPercent);
+    initGPIOAPinChangeInterrupts();
 }
 
 void buttonControllerLoop() {
@@ -84,7 +85,7 @@ void SW1setup() {
     SysCtlPeripheralEnable (SW1_PORT);
        GPIOPinTypeGPIOInput (SW1_PORT_BASE, UP_BUT_PIN);
        GPIOPadConfigSet (SW1_PORT_BASE, SW1_PIN, GPIO_STRENGTH_2MA,
-          GPIO_PIN_TYPE_STD_WPD); //pull up or pull down??
+          GPIO_PIN_TYPE_STD_WPD); //pull down?
 
 }
 
@@ -94,11 +95,11 @@ uint8_t getSW1Position() {
 }
 
 void setSW1mode(int8_t newMode) {
-    mode = newMode;
+    heliMode = newMode;
 }
 
 uint8_t getSW1mode() {
-    return mode;
+    return heliMode;
 }
 
 void resetPeriphButtons(void){
@@ -118,19 +119,21 @@ void initGPIOAPinChangeInterrupts(void){
     while(!SysCtlPeripheralReady(SW1_PORT)){
     }
 
-    GPIOIntRegister(SW1_PORT, SW1IntHandler);
+    GPIOIntRegister(SW1_PORT_BASE, SW1IntHandler);
 
     /**Initialize the GPIO pin configuration**/
 
     // sets pin 0, 1 as in put, SW controlled.
-    GPIOPinTypeGPIOInput(SW1_PORT, SW1_PIN);
+    GPIOPinTypeGPIOInput(SW1_PORT_BASE, SW1_PIN);
 
 
     // makes sw1 pin rising and falling edge triggered interrupt
-    GPIOIntTypeSet(SW1_PORT, SW1_PIN, GPIO_BOTH_EDGES);
+    GPIOIntTypeSet(SW1_PORT_BASE, SW1_PIN, GPIO_BOTH_EDGES);
 
     // Enable the sw1 pin interrupt
-    GPIOIntEnable(SW1_PORT, SW1_PIN);
+    GPIOIntEnable(SW1_PORT_BASE, SW1_PIN);
+
+
 }
 
 void SW1IntHandler() {
@@ -144,6 +147,7 @@ void SW1IntHandler() {
             setOutputOnline(1,true); // set both PWM output signals online
         }
     }
+    GPIOIntClear(SW1_PORT_BASE, SW1_PIN);
   
    //add code to landing routine part of controller that can set the mode from 2 to 0
     //or when the ref yaw is matched and current mode is zero and altitude is zero, set mode to zero(landed)

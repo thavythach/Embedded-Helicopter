@@ -35,9 +35,6 @@
 #define PWM_TAIL_GPIO_CONFIG GPIO_PF1_M1PWM5
 #define PWM_TAIL_GPIO_PIN    GPIO_PIN_1
 
-uint32_t main_duty = 0;
-uint32_t tail_duty = 0;
-
 //struct pwmConfig config = {150, 300, 0, 0, 250, 200, SYSCTL_PWMDIV_4, 4};
 //
 ////  PWM Hardware Details M0PWM7 (gen 3)
@@ -91,7 +88,7 @@ void initializePWM(uint8_t isMainRotor){
 	    PWMGenConfigure(PWM_MAIN_BASE, PWM_MAIN_GEN,
 	                    PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
 	    // Set the initial PWM parameters
-	    setPWM (PWM_FREQUENCY_MAIN, PWM_FIXED_DUTY_MAIN);
+	    setPWM (isMainRotor, main_duty);
 
 	    PWMGenEnable(PWM_MAIN_BASE, PWM_MAIN_GEN);
 
@@ -107,7 +104,7 @@ void initializePWM(uint8_t isMainRotor){
 	    PWMGenConfigure(PWM_TAIL_BASE, PWM_TAIL_GEN,
 	                    PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
 	    // Set the initial PWM parameters
-	    setPWM (PWM_FREQUENCY_TAIL, PWM_FIXED_DUTY_TAIL);
+	    setPWM (isMainRotor, tail_duty);
 
 	    PWMGenEnable(PWM_TAIL_BASE, PWM_TAIL_GEN);
 
@@ -126,7 +123,7 @@ void resetPeripheralPWM(){
 
 
 void setOutputOnline(int32_t isMainRotor, bool isOn){
-	isOn = true; // for right now
+
 	if (isMainRotor == 1){
 	    PWMOutputState(PWM_MAIN_BASE, PWM_MAIN_OUTBIT, isOn);
 	} else {

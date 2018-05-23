@@ -25,23 +25,20 @@
 void initDisplay(void); // OLED display
 void initClock (void); 
 void updateDisplay(int32_t val);
-void doCircularBufferApproximation(int32_t sum);
-int32_t initializeMeanValue(int32_t isInit, int32_t meanVal);
-uint32_t displayMeanVal(uint16_t meanVal, uint32_t count, uint16_t initMeanVal, uint32_t mode);
+void displayMeanVal(uint16_t meanVal, uint16_t initMeanVal);
 void initializeHelicopterOperations(void);
 void resetHelicopterOperations(void);
-void calculateRobustMeanValue(uint32_t initMeanVal, uint32_t meanVal);
+void calculateRobustMeanValue(uint16_t initMeanVal, uint16_t meanVal);
 
 static circBuf_t g_inBuffer;        // Buffer of size BUF_SIZE integers (sample values)
 static uint32_t g_ulSampCnt;    // Counter for the interrupts
 static int32_t yaw; 
 static uint8_t state;
-static int32_t altitude = 0;
-static int32_t deg;
+static int16_t altitude;
+//static int32_t deg;
 
 #define BUF_SIZE 20
 #define SAMPLE_RATE_HZ 100 // equation for it... 2*buffsize*fmax (2*10*4)
-#define RANGE_ALTITUDE 983.0
 #define sw1Pin GPIO_PIN_4 
 
 
@@ -107,7 +104,8 @@ void ADCIntHandler(void);
  * Global Requirements:
  * - none
  * **/
-
+uint32_t main_duty;
+uint32_t tail_duty;
 // configuration for both dreams
 
 // prototypes
@@ -144,9 +142,11 @@ void PIDController(uint32_t altitude, int32_t yaw);
     int32_t yawSetPoint; // integer rounded degree value, current degrees from reference +/- change
 } setPoints;
 
-static int8_t mode = 0;
-static int8_t  SW1Position = DOWN;
+static int8_t heliMode = 0;
+
 enum position {down = 0, up = 1};
+
+static int8_t  SW1Position = down;
 
 
 
@@ -208,7 +208,7 @@ int16_t getYawDegreesSetPoint();
  * param: yaw - global variable for yaw counter
  * param: altPercent - altitude percentage in integer form
  */
-void buttonControllerInit(int32_t yaw, uint8_t altPercent);
+void buttonControllerInit(int32_t yaw, int16_t altPercent);
 
 
 /*
