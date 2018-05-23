@@ -52,7 +52,7 @@ int main(void){
         //PID Motor control code
         PIDController(altitude, yaw);
         checkLanded();
-        startLanding();
+       // startLanding();
 
 
         //UART code
