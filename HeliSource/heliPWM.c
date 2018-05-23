@@ -51,7 +51,7 @@ void setPWMClocks(void){
     SysCtlPWMClockSet(PWM_DIVIDER_CODE);
 }
 
-void setPWM(uint8_t isMainRotor, uint32_t ui32Duty){
+void setPWM(uint8_t isMainRotor, int32_t ui32Duty){
 	
 	if (ui32Duty > 98) ui32Duty = 98;
 	else if (ui32Duty < 2) ui32Duty = 2; 
@@ -68,7 +68,7 @@ void setPWM(uint8_t isMainRotor, uint32_t ui32Duty){
 	    // Calculate the PWM period corresponding to the freq.
 	       uint32_t ui32Period = SysCtlClockGet() / PWM_DIVIDER / PWM_FREQUENCY_TAIL;
 
-	      // PWMGenPeriodSet(PWM_TAIL_BASE, PWM_TAIL_GEN, ui32Period);
+	       PWMGenPeriodSet(PWM_TAIL_BASE, PWM_TAIL_GEN, ui32Period);
 	       PWMPulseWidthSet(PWM_TAIL_BASE, PWM_TAIL_OUTNUM,
 	           ui32Period * ui32Duty / 100);
 	       tail_duty = ui32Duty;
@@ -93,7 +93,8 @@ void initializePWM(uint8_t isMainRotor){
 	    PWMGenEnable(PWM_MAIN_BASE, PWM_MAIN_GEN);
 
 	    // Disable the output.  Repeat this call with 'true' to turn O/P on.
-	    PWMOutputState(PWM_MAIN_BASE, PWM_MAIN_OUTBIT, false);
+	  //  PWMOutputState(PWM_MAIN_BASE, PWM_MAIN_OUTBIT, false);
+	    setOutputOnline(1,false); // set both PWM output signals online
 	} else {
 	    SysCtlPeripheralEnable(PWM_TAIL_PERIPH_PWM);
 	    SysCtlPeripheralEnable(PWM_TAIL_PERIPH_GPIO);
@@ -109,7 +110,9 @@ void initializePWM(uint8_t isMainRotor){
 	    PWMGenEnable(PWM_TAIL_BASE, PWM_TAIL_GEN);
 
 	    // Disable the output.  Repeat this call with 'true' to turn O/P on.
-	    PWMOutputState(PWM_TAIL_BASE, PWM_TAIL_OUTBIT, false);
+	   // PWMOutputState(PWM_TAIL_BASE, PWM_TAIL_OUTBIT, false);
+	    setOutputOnline(0,false); // set both PWM output signals online
+
 	}	
 }
 

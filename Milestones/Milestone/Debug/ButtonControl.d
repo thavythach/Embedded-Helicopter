@@ -21,6 +21,8 @@ ButtonControl.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/link
 ButtonControl.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/abi_prefix.h
 ButtonControl.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h
 ButtonControl.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h
+ButtonControl.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/math.h
+ButtonControl.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/_defs.h
 ButtonControl.obj: ../circBufT.h
 ButtonControl.obj: ../OrbitOLED/OrbitOLEDInterface.h
 ButtonControl.obj: E:/lab_a03_group_2/Dependencies/buttons4.h
@@ -46,6 +48,8 @@ C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/linkage.h:
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/abi_prefix.h: 
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h: 
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/math.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/_defs.h: 
 ../circBufT.h: 
 ../OrbitOLED/OrbitOLEDInterface.h: 
 E:/lab_a03_group_2/Dependencies/buttons4.h: 

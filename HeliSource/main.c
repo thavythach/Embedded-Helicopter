@@ -44,13 +44,16 @@ int main(void){
         displayMeanVal ((2 * sum + BUF_SIZE) / 2 / BUF_SIZE, initMeanVal);
         
         // controls the user input when flight mode equals flying.
+
         if ( getSW1mode() == 1 ){
             buttonControllerLoop();
         }
+
         //PID Motor control code
-        PIDController(altitude, yawDegreeConvert(yaw));
+        PIDController(altitude, yaw);
         checkLanded();
         startLanding();
+
 
         //UART code
       //  UART();

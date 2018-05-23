@@ -18,11 +18,12 @@
  *
  */
 #include "Helicopter.h"
+volatile int8_t heliMode = 0;
 
 //initialize static variables *************************************************************
 
 //Functions *******************************************************************************
-int16_t yawDegreeConvert(int32_t tempYaw) {
+int32_t yawDegreeConvert(int32_t tempYaw) {
     return (int)(((float)tempYaw) * 0.8035714285714286);
 }
 
@@ -163,7 +164,7 @@ void checkLanded(void){
 
 void startLanding(void){
     if (getSW1mode() == 2){
-        setPoints.altSetPoint = 0;
+        setPoints.altSetPoint = 1;
         setPoints.yawSetPoint = yawDegreeConvert(interupt_value);
     }
 }

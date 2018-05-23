@@ -14,6 +14,7 @@
 #include "utils/ustdlib.h"
 #include "driverlib/pin_map.h" //Needed for pin configure
 #include "driverlib/uart.h"
+#include <math.h>
 
 
 /** LIBRARIES | ENCE361 **/
@@ -37,7 +38,7 @@ extern volatile uint8_t state;
 extern volatile int16_t altitude;
 //static int32_t deg;
 
-#define BUF_SIZE 10
+#define BUF_SIZE 20
 #define SAMPLE_RATE_HZ 100 // equation for it... 2*buffsize*fmax (2*10*4)
 #define sw1Pin GPIO_PIN_4 
 
@@ -79,7 +80,6 @@ void pacerWait(void);
 #define CHANNEL_B_PIN GPIO_PIN_1
 #define YAW_PERIPH_GPIO_B SYSCTL_PERIPH_GPIOB
 #define YAW_BASE_GPIO_B GPIO_PORTB_BASE
-#define YAW_SAMPLE_RATE_HZ 1792 // minimum sampling rate (1792 SAM/s = 112 slots * 4 samples/slot * 4 rev/s)
 #define YawReference GPIO_PIN_4
 
 int interupt_value;
@@ -110,7 +110,7 @@ uint32_t tail_duty;
 
 // prototypes
 void setPWMClocks(void);
-void setPWM(uint8_t isMainRotor, uint32_t ui32Duty);
+void setPWM(uint8_t isMainRotor, int32_t ui32Duty);
 void initializePWM(uint8_t isMainMotor);
 void resetPeripheralPWM(void);
 void setOutputOnline(int32_t isMainRotor, bool isOn);
@@ -123,10 +123,10 @@ void setOutputOnline(int32_t isMainRotor, bool isOn);
  * - none 
 */
 
-void mainProportional(uint32_t altitude);
-void tailProportional(int32_t yaw);
+void mainProportional(uint32_t tmpAltitude);
+void tailProportional(int32_t tmpYaw);
 double pcontrol_update ( double error , double K_P );
-void PIDController(uint32_t altitude, int32_t yaw);
+void PIDController(uint32_t tmpAltitude, int32_t tmpYaw);
 
 /**
  * Button Control @ ButtonControl.c
@@ -142,7 +142,7 @@ void PIDController(uint32_t altitude, int32_t yaw);
     int32_t yawSetPoint; // integer rounded degree value, current degrees from reference +/- change
 } setPoints;
 
-static int8_t heliMode = 0;
+extern volatile int8_t heliMode;
 
 enum position {down = 0, up = 1};
 
@@ -155,7 +155,7 @@ static int8_t  SW1Position = down;
  * param: yawCount - raw yaw counter data, from global variable in Helicopter.c
  * return: int16_t yaw count converted to degrees
  */
-int16_t yawDegreeConvert(int32_t yaw);
+int32_t yawDegreeConvert(int32_t yaw);
 
 /*
  * Use this function to initialize set points for the PID before any TIVA buttons are pressed

@@ -98,11 +98,11 @@ void initializeHelicopterOperations(void){
     /** heliPWM.h initializations **/
     initializePWM(0); // init tail
     initializePWM(1); // init main
-  //  setOutputOnline(0,true); // set both PWM output signals online
-  //  setOutputOnline(1,true); // set both PWM output signals online
+
     SW1setup();
-    initCircBuf (&g_inBuffer, BUF_SIZE); // from @ tiva src files
     initYaw(); // yaw
+    initCircBuf (&g_inBuffer, BUF_SIZE); // from @ tiva src files
+
     buttonControllerInit(yawDegreeConvert(yaw), altitude);
     initialiseUSB_UART();
     initDisplay (); // OLED DISPLAY

@@ -21,6 +21,8 @@ heliADC.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/linkage.h
 heliADC.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/abi_prefix.h
 heliADC.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h
 heliADC.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h
+heliADC.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/math.h
+heliADC.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/_defs.h
 heliADC.obj: E:/lab_a03_group_2/Milestones/Milestone/circBufT.h
 heliADC.obj: E:/lab_a03_group_2/Milestones/Milestone/OrbitOLED/OrbitOLEDInterface.h
 heliADC.obj: E:/lab_a03_group_2/Dependencies/buttons4.h
@@ -46,6 +48,8 @@ C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/linkage.h:
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/abi_prefix.h: 
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h: 
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/math.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/_defs.h: 
 E:/lab_a03_group_2/Milestones/Milestone/circBufT.h: 
 E:/lab_a03_group_2/Milestones/Milestone/OrbitOLED/OrbitOLEDInterface.h: 
 E:/lab_a03_group_2/Dependencies/buttons4.h: 

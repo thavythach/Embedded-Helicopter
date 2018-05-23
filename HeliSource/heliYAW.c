@@ -1,5 +1,6 @@
 #include "Helicopter.h"
 
+/*
 int yi = 0; //global counter
 
 //INTERUPT HANDLER
@@ -11,6 +12,7 @@ void yaw_ref(void){
     }
     GPIOIntClear(GPIO_PORTC_BASE, YawReference);
 }
+*/
 
 /**
  * Enable the GPIOB peripheral
