@@ -166,7 +166,12 @@ void checkLanded(void){ //bug: if switch is flipped from fly mode to landing mod
 void startLanding(void){
     if (getSW1mode() == 2){
         setPoints.altSetPoint = 0;
-        setPoints.yawSetPoint = yawDegreeConvert(interupt_value);
+        if (abs(interupt_value - yaw) < (abs((interupt_value + 360) - yaw ))){
+            setPoints.yawSetPoint = yawDegreeConvert(interupt_value);
+        } else {
+            setPoints.yawSetPoint = yawDegreeConvert(interupt_value + 360);
+        }
+
     }
 }
 

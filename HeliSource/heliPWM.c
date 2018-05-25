@@ -5,7 +5,7 @@
 //structs
 // PWM configuration
 #define PWM_FREQUENCY_MAIN 250
-#define PWM_FREQUENCY_TAIL 200
+#define PWM_FREQUENCY_TAIL 250
 #define PWM_FIXED_DUTY_MAIN 0
 #define PWM_FIXED_DUTY_TAIL 0
 #define PWM_DIVIDER_CODE SYSCTL_PWMDIV_4
@@ -35,18 +35,6 @@
 #define PWM_TAIL_GPIO_CONFIG GPIO_PF1_M1PWM5
 #define PWM_TAIL_GPIO_PIN    GPIO_PIN_1
 
-//struct pwmConfig config = {150, 300, 0, 0, 250, 200, SYSCTL_PWMDIV_4, 4};
-//
-////  PWM Hardware Details M0PWM7 (gen 3)
-////  ---Main Rotor PWM: PC5, J4-05
-//struct pwmRotor mainRotor = { PWM0_BASE, PWM_GEN_3, PWM_OUT_7, PWM_OUT_7_BIT, SYSCTL_PERIPH_PWM0, SYSCTL_PERIPH_GPIOC, GPIO_PORTC_BASE, GPIO_PC5_M0PWM7, GPIO_PIN_5 };
-//
-////  PWM Hardware Details M1PWM5 (gen 2)
-////  ---Tail Rotor PWM: PF1, J3-10
-//struct pwmRotor tailRotor = { PWM1_BASE, PWM_GEN_2, PWM_OUT_5, PWM_OUT_5_BIT, SYSCTL_PERIPH_PWM1, SYSCTL_PERIPH_GPIOF, GPIO_PORTF_BASE, GPIO_PF1_M1PWM5, GPIO_PIN_1 };
-
-
-
 void setPWMClocks(void){
     SysCtlPWMClockSet(PWM_DIVIDER_CODE);
 }
@@ -63,6 +51,7 @@ void setPWM(uint8_t isMainRotor, int32_t ui32Duty){
 	        PWMGenPeriodSet(PWM_MAIN_BASE, PWM_MAIN_GEN, ui32Period);
 	        PWMPulseWidthSet(PWM_MAIN_BASE, PWM_MAIN_OUTNUM,
 	            ui32Period * ui32Duty / 100);
+
 	    main_duty = ui32Duty;
 	} else {
 	    // Calculate the PWM period corresponding to the freq.
