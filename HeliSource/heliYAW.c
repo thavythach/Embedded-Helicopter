@@ -1,15 +1,15 @@
 #include "Helicopter.h"
 
-
+volatile int8_t interupt_value = 1;
 int32_t yi = 0; //global counter
 
 //INTERUPT HANDLER
 void yaw_ref(void){
     yi++;
-    interupt_value = yaw;
     if (yi == 1) {
         yaw = 0;
     }
+    interupt_value = yawDegreeConvert(yaw);
     GPIOIntClear(GPIO_PORTC_BASE, YawReference);
 }
 

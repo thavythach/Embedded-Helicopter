@@ -41,7 +41,7 @@ void setPWMClocks(void){
 
 void setPWM(uint8_t isMainRotor, int32_t ui32Duty){
 	
-	if (ui32Duty > 98) ui32Duty = 98;
+	if (ui32Duty > 50) ui32Duty = 25;
 	else if (ui32Duty < 2) ui32Duty = 2; 
 	
 	if (isMainRotor == 1){

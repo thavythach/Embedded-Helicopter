@@ -82,7 +82,7 @@ void pacerWait(void);
 #define YAW_BASE_GPIO_B GPIO_PORTB_BASE
 #define YawReference GPIO_PIN_4
 
-int interupt_value;
+extern volatile int8_t interupt_value;
 
 void yaw_ref(void);
 void YawIntHandler(void);
@@ -260,7 +260,7 @@ void initGPIOAPinChangeInterrupts(void);
  */
 void SW1IntHandler(void);
 
-
+void initializeRef(void);
 void checkLanded(void);
 void startLanding(void);
 

@@ -48,19 +48,19 @@ void UART() {
 
            slowTick = false;
 
-           usnprintf (string, sizeof(string), "Yaw = %4d", yawDegreeConvert(yaw));
+           usnprintf (string, sizeof(string), "Yaw = %4d\n\r", yawDegreeConvert(yaw));
            UARTSend (string);
 
-           usnprintf (string, sizeof(string), "SP Yaw = %4d", getYawDegreesSetPoint());
+           usnprintf (string, sizeof(string), "SP Yaw = %4d\n\r", getYawDegreesSetPoint());
            UARTSend (string);
 
-           usnprintf (string, sizeof(string), "Alt = %3d", altitude);
+           usnprintf (string, sizeof(string), "Alt = %3d\n\r", altitude);
            UARTSend (string);
 
-           usnprintf (string, sizeof(string), "SP Alt = %3d", getAltitudePercentSetPoint());
+           usnprintf (string, sizeof(string), "SP Alt = %3d\n\r", getAltitudePercentSetPoint());
            UARTSend (string);
 
-           usnprintf (string, sizeof(string), "Mode = %s", getSW1modeString(getSW1mode()));
+           usnprintf (string, sizeof(string), "Mode = %s\n\r", getSW1modeString(getSW1mode()));
            UARTSend (string);
        }
 }

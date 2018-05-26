@@ -19,6 +19,7 @@
  */
 #include "Helicopter.h"
 volatile int8_t heliMode = 0;
+int8_t switchFlipIndex = 0;
 
 //initialize static variables *************************************************************
 
@@ -52,7 +53,7 @@ void checkAndDecrementAltitude() {
 
 void checkAndIncrementYaw() {
     if (checkButton(RIGHT) == PUSHED) {
-       setPoints.yawSetPoint += 15;
+        setPoints.yawSetPoint += 15;
     }
 }
 
@@ -154,8 +155,18 @@ void SW1IntHandler() {
     //or when the ref yaw is matched and current mode is zero and altitude is zero, set mode to zero(landed)
 }
 
+//void initializeRef(void){
+//    switchFlipIndex++;
+//    if (switchFlipIndex == 1){
+//        while(yaw != 0){
+//            setPWM(0, 60);
+//        }
+//        setPoints.yawSetPoint = 0;
+//    }
+//}
+
 void checkLanded(void){ //bug: if switch is flipped from fly mode to landing mode, but latitude is already below 2%, altitude setpoint is not set to zero nor 2% duty
-    startLanding();
+    //startLanding();
     if ((getSW1mode() == 2) && altitude <= 2) { // && ((ref-)) {
         setOutputOnline(0,false); // set both PWM output signals online
         setOutputOnline(1,false); // set both PWM output signals online

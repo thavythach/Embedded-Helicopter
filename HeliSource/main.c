@@ -46,6 +46,7 @@ int main(void){
         // controls the user input when flight mode equals flying.
 
         if ( getSW1mode() == 1 ){
+//            initializeRef();
             buttonControllerLoop();
         }
 
@@ -56,7 +57,7 @@ int main(void){
 
 
         //UART code
-      //  UART();
+        UART();
 
         // Update Display by 8Hz
         updateDisplay(96);
