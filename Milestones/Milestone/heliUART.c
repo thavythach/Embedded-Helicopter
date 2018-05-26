@@ -62,5 +62,9 @@ void UART() {
 
            usnprintf (string, sizeof(string), "Mode = %s\n\r", getSW1modeString(getSW1mode()));
            UARTSend (string);
+
+
+           usnprintf (string, sizeof(string), "----------------");
+           UARTSend (string);
        }
 }

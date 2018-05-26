@@ -1,7 +1,7 @@
 #include "Helicopter.h"
 
 static double error_integrated = 0.0;
-
+double main_control = 0;
 void mainProportional(uint32_t tmpAltitude){
     double error;
     double control;
@@ -14,13 +14,13 @@ void mainProportional(uint32_t tmpAltitude){
     if (getSW1mode() != 0) {
         error = abs(getAltitudePercentSetPoint() - tmpAltitude);
         error_integrated += error*delta;
-        control = error* p_gain + error_integrated*i_gain;
+        main_control = error* p_gain + error_integrated*i_gain;
 
 
         if (tmpAltitude > getAltitudePercentSetPoint()) {
-            control = 2;
+            main_control = 2;
         }
-        setPWM(1,  (int)control);
+        setPWM(1,  (int)main_control);
     }
 }
 
@@ -36,19 +36,20 @@ void tailProportional(int32_t tmpYaw){
         if (error >= 0) {
             error_integrated += error*delta;
             control = error* p_gain + error_integrated*i_gain;
-            if (tmpYaw > getYawDegreesSetPoint()) {
-                control = 0;
-            }
-
             setPWM(0,  (int)control);
         }
         else {
+
             error_integrated += abs(error)*delta;
             control = abs(error)* p_gain + error_integrated*i_gain;
-            if (tmpYaw < getYawDegreesSetPoint()) {
-                control = 0;
+            if (main_control >= control) {
+                setPWM(1,  (int)main_control);
             }
-            setPWM(1,  (int)control);
+            else {
+                setPWM(1,  (int)control);
+
+            }
+
         }
 
     }
