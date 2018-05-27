@@ -2,59 +2,35 @@
 
 int32_t error_integrated_main = 0.0;
 int32_t error_integrated_tail = 0.0;
-int32_t main_control = 0;
-void mainProportional(uint32_t tmpAltitude){
-    int32_t error;
-
-    float delta = 1;
-    float p_gain = 3;
-    float i_gain = 0.01;
-
-
-    if (getSW1mode() != 0) {
-        error = getAltitudePercentSetPoint() - tmpAltitude;
-        error_integrated_main += error*delta;
-        main_control = error* p_gain + error_integrated_main*i_gain;
-        setPWM(1,  (int)main_control);
-    }
-}
-
-void tailProportional(int32_t tmpYaw){
-    int32_t error;
-    int32_t control;
-    float delta = 1; //Intergral/derivative increments
-    float p_gain = 1.5;
-    float i_gain = 0;
-
-    if (getSW1mode() != 0) { //Need to make the posistion relative to the yaw degrees. Nedd to add derivative and intergal control to advoid this.
-        error = getYawDegreesSetPoint() - yawDegreeConvert(tmpYaw);
-        if (error >= 0) {
-            error_integrated_tail += error*delta;
-            control = error* p_gain + error_integrated_tail*i_gain;
-            setPWM(0,  (int)control);
-        }
-        else {
-            error_integrated_tail += abs(error)*delta;
-            control = abs(error)* p_gain + error_integrated_tail*i_gain;
-            if (main_control >= control) {
-                setPWM(1,  (int)main_control);
-            }
-            else {
-                setPWM(1,  (int)control);
-
-            }
-
-        }
-
-    }
-
-
-}
 
 void PIDController(uint32_t tmpAltitude, int32_t tmpYaw){
-    mainProportional(tmpAltitude);
-    tailProportional(tmpYaw);
+
+    int32_t error_main;
+    int32_t error_tail;
+    int32_t control_tail;
+    int32_t main_control;
+
+    float p_gain_main = 0.6;
+    float i_gain_main = 0;
+    float delta = 1; //Intergral/derivative increments
+    float p_gain_tail = 0.3;
+    float i_gain_tail = 0.02;
+
+    if (getSW1mode() != 0) {
+        error_tail = getYawDegreesSetPoint() - yawDegreeConvert(tmpYaw); // p_tail
+        error_main = getAltitudePercentSetPoint() - tmpAltitude; // p_main
+
+        error_integrated_tail += error_tail*delta; // integral_tail
+        error_integrated_main += error_main*delta; // integral_main
+
+        control_tail = error_tail* p_gain_tail + error_integrated_tail*i_gain_tail; // tail_duty
+        main_control = error_main* p_gain_main + error_integrated_main*i_gain_main;
+
+        setPWM(0,  control_tail);
+        setPWM(1,  main_control);
+    }
 }
+
 
 
 

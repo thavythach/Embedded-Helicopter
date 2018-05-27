@@ -64,10 +64,6 @@ void UARTSend (char *string);
 char * getSW1modeString(int32_t mode);
 void UART();
 
-//******************************************
-//pacer.c*******************************
-void pacerWait(void);
-//**************************************
 /** 
  * YAW @heliYAW.c
  * Global Requirements:
@@ -121,10 +117,8 @@ void setOutputOnline(int32_t isMainRotor, bool isOn);
  * - none 
 */
 
-void mainProportional(uint32_t tmpAltitude);
-void tailProportional(int32_t tmpYaw);
-double pcontrol_update ( double error , double K_P );
 void PIDController(uint32_t tmpAltitude, int32_t tmpYaw);
+double pcontrol_update ( double error , double K_P );
 
 /**
  * Button Control @ ButtonControl.c
@@ -142,7 +136,9 @@ void PIDController(uint32_t tmpAltitude, int32_t tmpYaw);
 } setPoints;
 
 extern volatile int8_t heliMode;
-
+#define LANDED 0
+#define FLYING 1
+#define LANDING 2
 enum position {down = 0, up = 1};
 
 static int8_t  SW1Position = down;

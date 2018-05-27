@@ -1,13 +1,8 @@
 #include "Helicopter.h"
 
-// "mainRotor" and "tailRotor" are your best friends.
-
-//structs
 // PWM configuration
 #define PWM_FREQUENCY_MAIN 250
 #define PWM_FREQUENCY_TAIL 250
-#define PWM_FIXED_DUTY_MAIN 0
-#define PWM_FIXED_DUTY_TAIL 0
 #define PWM_DIVIDER_CODE SYSCTL_PWMDIV_4
 #define PWM_DIVIDER 4
 
@@ -41,10 +36,11 @@ void setPWMClocks(void){
 
 void setPWM(uint8_t isMainRotor, int32_t ui32Duty){
 	
-	if (ui32Duty > 50) ui32Duty = 50;
-	else if (ui32Duty < 2) ui32Duty = 2; 
 	
 	if (isMainRotor == 1){
+	    if (ui32Duty > 60) ui32Duty = 60;
+        else if (ui32Duty < 11) ui32Duty = 11;
+
 	    uint32_t ui32Period =
 	            SysCtlClockGet() / PWM_DIVIDER / PWM_FREQUENCY_MAIN;
 
@@ -54,6 +50,8 @@ void setPWM(uint8_t isMainRotor, int32_t ui32Duty){
 
 	    main_duty = ui32Duty;
 	} else {
+	    if (ui32Duty > 80) ui32Duty = 80;
+        else if (ui32Duty < 2) ui32Duty = 2;
 	    // Calculate the PWM period corresponding to the freq.
 	       uint32_t ui32Period = SysCtlClockGet() / PWM_DIVIDER / PWM_FREQUENCY_TAIL;
 
@@ -62,7 +60,6 @@ void setPWM(uint8_t isMainRotor, int32_t ui32Duty){
 	           ui32Period * ui32Duty / 100);
 	       tail_duty = ui32Duty;
 	}
-	// i should save the duty cycles... here at some point.
 }
 
 void initializePWM(uint8_t isMainRotor){
@@ -77,12 +74,12 @@ void initializePWM(uint8_t isMainRotor){
 	    PWMGenConfigure(PWM_MAIN_BASE, PWM_MAIN_GEN,
 	                    PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
 	    // Set the initial PWM parameters
+	    main_duty = 8;
 	    setPWM (isMainRotor, main_duty);
 
 	    PWMGenEnable(PWM_MAIN_BASE, PWM_MAIN_GEN);
 
 	    // Disable the output.  Repeat this call with 'true' to turn O/P on.
-	  //  PWMOutputState(PWM_MAIN_BASE, PWM_MAIN_OUTBIT, false);
 	    setOutputOnline(1,false); // set both PWM output signals online
 	} else {
 	    SysCtlPeripheralEnable(PWM_TAIL_PERIPH_PWM);
@@ -94,12 +91,13 @@ void initializePWM(uint8_t isMainRotor){
 	    PWMGenConfigure(PWM_TAIL_BASE, PWM_TAIL_GEN,
 	                    PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
 	    // Set the initial PWM parameters
+        main_duty = 2;
+
 	    setPWM (isMainRotor, tail_duty);
 
 	    PWMGenEnable(PWM_TAIL_BASE, PWM_TAIL_GEN);
 
 	    // Disable the output.  Repeat this call with 'true' to turn O/P on.
-	   // PWMOutputState(PWM_TAIL_BASE, PWM_TAIL_OUTBIT, false);
 	    setOutputOnline(0,false); // set both PWM output signals online
 
 	}	

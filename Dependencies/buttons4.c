@@ -73,7 +73,7 @@ initButtons (void)
     GPIOPadConfigSet (RIGHT_BUT_PORT_BASE, RIGHT_BUT_PIN, GPIO_STRENGTH_2MA,
        GPIO_PIN_TYPE_STD_WPU);
     but_normal[RIGHT] = RIGHT_BUT_NORMAL;
-    // LEFT button (active LOW)
+    // reset button (active LOW)
     SysCtlPeripheralEnable(RESET_PERIPH);
     GPIOPinTypeGPIOInput(RESET_BASE, RESET_PIN);
     GPIOPadConfigSet (RESET_BASE, RESET_PIN, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU); // PULL UP

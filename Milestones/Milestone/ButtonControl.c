@@ -145,14 +145,14 @@ void initGPIOAPinChangeInterrupts(void){
 }
 
 void SW1IntHandler() {
-    if (getSW1mode() != 2) {
-        if ((getSW1mode() == 1) && !getSW1Position()) {
-            setSW1mode(2);
+    if (getSW1mode() != LANDING) {
+        if ((getSW1mode() == FLYING) && !getSW1Position()) {
+            setSW1mode(LANDING);
         }
         if (getSW1Position()) {
-            setSW1mode(1);
-            setOutputOnline(0,true); // set both PWM output signals online
-            setOutputOnline(1,true); // set both PWM output signals online
+            setSW1mode(FLYING);
+            setOutputOnline(0,true);
+            setOutputOnline(1,true);
         }
     }
     GPIOIntClear(SW1_PORT_BASE, SW1_PIN);
@@ -171,18 +171,22 @@ void initializeRef(void){
     }
 }
 
-void checkLanded(void){ //bug: if switch is flipped from fly mode to landing mode, but latitude is already below 2%, altitude setpoint is not set to zero nor 2% duty
+void checkLanded(void){
     startLanding();
-    if ((getSW1mode() == 2) && altitude <= 2) { // && ((ref-)) {
+    if ((getSW1mode() == LANDING) && altitude <= 2) { // && ((ref-)) {
+        setPWM(0, 0);
+        setPWM(1, 0);
         setOutputOnline(0,false); // set both PWM output signals online
         setOutputOnline(1,false); // set both PWM output signals online
-        setSW1mode(0);
+        setSW1mode(LANDED);
     }
-}
 
+
+}
 void startLanding(void){
-    if (getSW1mode() == 2){
+    if (getSW1mode() == LANDING){
         setPoints.altSetPoint = 0;
+        setPoints.yawSetPoint = yawDegreeConvert(yaw);
     }
 //        if (abs(interupt_value - yaw) < (abs((interupt_value + 360) - yaw ))){
 //            setPoints.yawSetPoint = yawDegreeConvert(interupt_value);

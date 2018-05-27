@@ -48,7 +48,7 @@ void UART() {
 
            slowTick = false;
 
-           usnprintf (string, sizeof(string), "Yaw = %4d\n\r", yawDegreeConvert(yaw));
+           usnprintf (string, sizeof(string), "\nYaw = %4d\n\r", yawDegreeConvert(yaw));
            UARTSend (string);
 
            usnprintf (string, sizeof(string), "SP Yaw = %4d\n\r", getYawDegreesSetPoint());
@@ -60,11 +60,17 @@ void UART() {
            usnprintf (string, sizeof(string), "SP Alt = %3d\n\r", getAltitudePercentSetPoint());
            UARTSend (string);
 
+           // TODO: remove
+           usnprintf (string, sizeof(string), "SP m = %3d\n\r", main_duty);
+           UARTSend (string);
+           usnprintf (string, sizeof(string), "SP t = %3d\n\r", tail_duty);
+           UARTSend (string);
+           // TODO: end_remove
+
            usnprintf (string, sizeof(string), "Mode = %s\n\r", getSW1modeString(getSW1mode()));
            UARTSend (string);
 
-
-           usnprintf (string, sizeof(string), "----------------");
+           usnprintf (string, sizeof(string), "------------------------\n\r");
            UARTSend (string);
        }
 }
