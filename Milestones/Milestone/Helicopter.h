@@ -115,8 +115,6 @@ void initializePWM(uint8_t isMainMotor);
 void resetPeripheralPWM(void);
 void setOutputOnline(int32_t isMainRotor, bool isOn);
 
-// todo: a display of the pwm duty cycle for each motor as a percentage is maintained on the orbit display.
-
 /**
  * PID @heliPID.c
  * Global Requirements:
@@ -137,6 +135,7 @@ void PIDController(uint32_t tmpAltitude, int32_t tmpYaw);
 #define SW1_PORT_BASE  GPIO_PORTA_BASE
 #define SW1_PIN  GPIO_PIN_7
 
+
  struct setpoints {
     uint8_t altSetPoint; //integer between 0 and 100
     int32_t yawSetPoint; // integer rounded degree value, current degrees from reference +/- change
@@ -147,7 +146,7 @@ extern volatile int8_t heliMode;
 enum position {down = 0, up = 1};
 
 static int8_t  SW1Position = down;
-
+void resetSoft();
 
 
 /*

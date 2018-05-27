@@ -34,6 +34,11 @@ void initSetPoints(int32_t tempYaw, uint8_t altPercent) {
     setPoints.yawSetPoint = yawDegreeConvert(tempYaw);
 }
 
+void resetSoft(){
+    if (checkButton(HELI_RESET) == PUSHED){
+        SysCtlReset();
+    }
+}
 
 void checkAndIncrementAltitude() {
     if (checkButton(UP) == PUSHED) {
@@ -85,11 +90,12 @@ void buttonControllerLoop() {
 
 void SW1setup() {
     SysCtlPeripheralEnable (SW1_PORT);
-       GPIOPinTypeGPIOInput (SW1_PORT_BASE, UP_BUT_PIN);
-       GPIOPadConfigSet (SW1_PORT_BASE, SW1_PIN, GPIO_STRENGTH_2MA,
-          GPIO_PIN_TYPE_STD_WPD); //pull down?
+   GPIOPinTypeGPIOInput (SW1_PORT_BASE, UP_BUT_PIN);
+   GPIOPadConfigSet (SW1_PORT_BASE, SW1_PIN, GPIO_STRENGTH_2MA,
+      GPIO_PIN_TYPE_STD_WPD); //pull down?
 
 }
+
 
 uint8_t getSW1Position() {
     uint8_t SW1State = GPIOPinRead(SW1_PORT_BASE, SW1_PIN);
@@ -155,18 +161,18 @@ void SW1IntHandler() {
     //or when the ref yaw is matched and current mode is zero and altitude is zero, set mode to zero(landed)
 }
 
-//void initializeRef(void){
-//    switchFlipIndex++;
-//    if (switchFlipIndex == 1){
-//        while(yaw != 0){
-//            setPWM(0, 60);
-//        }
-//        setPoints.yawSetPoint = 0;
-//    }
-//}
+void initializeRef(void){
+    switchFlipIndex++;
+    if (switchFlipIndex == 1){
+        while(yaw != 0){
+            setPWM(0, 5);
+        }
+        setPoints.yawSetPoint = 0;
+    }
+}
 
 void checkLanded(void){ //bug: if switch is flipped from fly mode to landing mode, but latitude is already below 2%, altitude setpoint is not set to zero nor 2% duty
-    //startLanding();
+    startLanding();
     if ((getSW1mode() == 2) && altitude <= 2) { // && ((ref-)) {
         setOutputOnline(0,false); // set both PWM output signals online
         setOutputOnline(1,false); // set both PWM output signals online
@@ -177,13 +183,12 @@ void checkLanded(void){ //bug: if switch is flipped from fly mode to landing mod
 void startLanding(void){
     if (getSW1mode() == 2){
         setPoints.altSetPoint = 0;
-        if (abs(interupt_value - yaw) < (abs((interupt_value + 360) - yaw ))){
-            setPoints.yawSetPoint = yawDegreeConvert(interupt_value);
-        } else {
-            setPoints.yawSetPoint = yawDegreeConvert(interupt_value + 360);
-        }
-
     }
+//        if (abs(interupt_value - yaw) < (abs((interupt_value + 360) - yaw ))){
+//            setPoints.yawSetPoint = yawDegreeConvert(interupt_value);
+//        } else {
+//            setPoints.yawSetPoint = yawDegreeConvert(interupt_value + 360);
+
 }
 
 

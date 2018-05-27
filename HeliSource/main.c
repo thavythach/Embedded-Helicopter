@@ -46,7 +46,7 @@ int main(void){
         // controls the user input when flight mode equals flying.
 
         if ( getSW1mode() == 1 ){
-//            initializeRef();
+            //initializeRef();
             buttonControllerLoop();
         }
 

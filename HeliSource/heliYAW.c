@@ -27,8 +27,8 @@ void initYaw(void){
     }
 
     /**Wait for the GPIOC module to be ready**/
-  //  while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOC)){
-  //  }
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOC)){
+    }
 
     GPIOIntRegister(GPIO_PORTB_BASE, YawIntHandler);
     GPIOIntRegister(GPIO_PORTC_BASE, yaw_ref);
