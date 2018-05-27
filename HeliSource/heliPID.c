@@ -13,7 +13,7 @@ void PIDController(uint32_t tmpAltitude, int32_t tmpYaw){
     float p_gain_main = 0.6;
     float i_gain_main = 0;
     float delta = 1; //Intergral/derivative increments
-    float p_gain_tail = 0.3;
+    float p_gain_tail = 0.4;
     float i_gain_tail = 0.02;
 
     if (getSW1mode() != 0) {
