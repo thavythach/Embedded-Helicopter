@@ -96,11 +96,11 @@ void initializeHelicopterOperations(void){
     initADC (); // Analogue-To-Digital Conversion(s)
 
     /** heliPWM.h initializations **/
-    initializePWM(0); // init tail
-    initializePWM(1); // init main
-
+    initializePWM(); // init tail and main
+    initResetButton();
     SW1setup();
     initYaw(); // yaw
+    initYawReference();
     initCircBuf (&g_inBuffer, BUF_SIZE); // from @ tiva src files
 
     buttonControllerInit(yawDegreeConvert(yaw), altitude);

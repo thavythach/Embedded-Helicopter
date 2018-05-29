@@ -1,56 +1,113 @@
 #include "Helicopter.h"
-
+#include <math.h>
 volatile int8_t interupt_value = 1;
-int32_t yi = 0; //global counter
+volatile static int32_t foundRefYaw = 0; //global flag
+int32_t val = 0;
+int8_t lock = 1;
 
-//INTERUPT HANDLER
+
+/**
+ * @desc interrupt handling finding the yaw reference value when looking at the helicopter.
+ * @param N/A
+ * @return N/A
+ */
 void yaw_ref(void){
-    yi++;
-    if (yi == 1) {
+    foundRefYaw += 1;
+    if (foundRefYaw == 1) {
         yaw = 0;
+        setPoints.yawSetPoint = interupt_value;
     }
-    interupt_value = yawDegreeConvert(yaw);
+
+   // OLEDStringDraw ("refyaw now", 0, 3); // tail motor duty cycle in %
     GPIOIntClear(GPIO_PORTC_BASE, YawReference);
+}
+
+/**
+ * @desc helps initialize they initial yaw reference as helicopter looks at the camera on remote labs
+ * @param N/A
+ * @return N/A
+ */
+void initializeRef(void) {
+
+   int32_t yawDegrees = yawDegreeConvert(yaw);
+   //setPoints.yawSetPoint = yawDegrees - 5;
+   while ((foundRefYaw < 1) && (abs(yawDegrees) < 360)) {
+       yawDegrees = yawDegreeConvert(yaw);
+    //   resetSoft();
+       if (abs(yawDegrees) < abs(setPoints.yawSetPoint + 2)) {
+           setPoints.yawSetPoint -= 5;
+       }
+  /*
+   while (foundRefYaw == 0) {
+       setPWM(0, 15);
+   }
+   */
+       PIDController(altitude, yaw);
+       UART();
+
+   }
+
 }
 
 
 /**
- * Enable the GPIOB peripheral
+ * @desc initializations the Yaw Peripherals (GPIOB) with BOTH_EDGES
+ * @param N/A
+ * @return N/A
  */
 void initYaw(void){
     // Enable the GPIOB peripheral
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
-    //SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
 
     /**Wait for the GPIOB module to be ready**/
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOB)){
     }
 
-    /**Wait for the GPIOC module to be ready**/
-    //while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOC)){
-    //}
-
     GPIOIntRegister(GPIO_PORTB_BASE, YawIntHandler);
-    //GPIOIntRegister(GPIO_PORTC_BASE, yaw_ref);
 
     /**Initialize the GPIO pin configuration**/
 
     // sets pin 0, 1 as in put, SW controlled.
     GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, CHANNEL_A_PIN | CHANNEL_B_PIN);
-    //GPIOPinTypeGPIOInput(GPIO_PORTC_BASE, YawReference);
 
 
-    // makes pins 0 and 1 rising edge triggered interrupts
+    // makes pins 0 and 1 both edge triggered interrupts
     GPIOIntTypeSet(GPIO_PORTB_BASE, CHANNEL_A_PIN | CHANNEL_B_PIN, GPIO_BOTH_EDGES);
-    //GPIOIntTypeSet(GPIO_PORTC_BASE, YawReference, GPIO_BOTH_EDGES);
 
     // Enable the pin interrupts
     GPIOIntEnable(GPIO_PORTB_BASE, CHANNEL_A_PIN | CHANNEL_B_PIN);
-    //GPIOIntEnable(GPIO_PORTC_BASE, YawReference);
-
-
 }
 
+/**
+ * @desc initializations the Yaw Reference Peripherals (GPIOC) with FALLING_EDGE
+ * @param N/A
+ * @return N/A
+ */
+void initYawReference(void){
+    // Enable the GPIOB peripheral
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
+
+    /**Wait for the GPIOC module to be ready**/
+   while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOC)){}
+
+   GPIOIntRegister(GPIO_PORTC_BASE, yaw_ref);
+
+   // sets pin 4 as in put, SW controlled.
+   GPIOPinTypeGPIOInput(GPIO_PORTC_BASE, YawReference);
+
+   // makes pins pin 4 falling edge triggered interrupts
+   GPIOIntTypeSet(GPIO_PORTC_BASE, YawReference, GPIO_RISING_EDGE);
+
+   // Enable the pin interrupts
+   GPIOIntEnable(GPIO_PORTC_BASE, YawReference);
+}
+
+
+/**
+ * @desc Quadrature Decoding State Machine to control yaw value.
+ * @param N/A
+ * @return N/A
+ */
 void YawIntHandler(void){
 
     // checking state 3
@@ -131,5 +188,4 @@ void YawIntHandler(void){
     // clearing interrupts
     GPIOIntClear(GPIO_PORTB_BASE, CHANNEL_B_PIN);
     GPIOIntClear(GPIO_PORTB_BASE, CHANNEL_A_PIN);
-
 }

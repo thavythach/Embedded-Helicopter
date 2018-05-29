@@ -1,32 +1,44 @@
 #include "Helicopter.h"
 
-int32_t error_integrated_main = 0.0;
-int32_t error_integrated_tail = 0.0;
+int32_t error_integrated_main = 0.0; // accumulated error_int_main
+int32_t error_integrated_tail = 0.0; // accumulated error_int_tail
 
+/**
+ * @desc Proportional and Integral control operation for a helicopter.
+ * @param uint32_t tmpAltitude current height of helicopter
+ * @param int32_t tmpYaw current yaw of helicopter
+ * @return N/A
+ */
 void PIDController(uint32_t tmpAltitude, int32_t tmpYaw){
 
-    int32_t error_main;
-    int32_t error_tail;
-    int32_t control_tail;
-    int32_t main_control;
+    int32_t error_main, error_tail, main_control, tail_control;
+    float p_gain_main, i_gain_main;
+    float p_gain_tail, i_gain_tail;
 
-    float p_gain_main = 0.6;
-    float i_gain_main = 0;
-    float delta = 1; //Intergral/derivative increments
-    float p_gain_tail = 0.4;
-    float i_gain_tail = 0.02;
+    // Intergral Increments
+    //delta kept at 1, KI used to control the 'time' interval of integration
+    float delta = 1;
 
-    if (getSW1mode() != 0) {
-        error_tail = getYawDegreesSetPoint() - yawDegreeConvert(tmpYaw); // p_tail
-        error_main = getAltitudePercentSetPoint() - tmpAltitude; // p_main
+    // main gains
+    p_gain_main = 0.6;
+    i_gain_main = 0.01; //implied delta_t in this gain value
 
-        error_integrated_tail += error_tail*delta; // integral_tail
-        error_integrated_main += error_main*delta; // integral_main
+    // tail gains
+    p_gain_tail = 0.45;
+    i_gain_tail = 0.02; // 0.02; //implied delat_t in this gain value;
 
-        control_tail = error_tail* p_gain_tail + error_integrated_tail*i_gain_tail; // tail_duty
+    // construct error margins
+    if (getSW1mode() != LANDED) {
+        error_tail = getYawDegreesSetPoint() - yawDegreeConvert(tmpYaw);
+        error_main = getAltitudePercentSetPoint() - tmpAltitude;
+
+        error_integrated_tail += error_tail*delta;
+        error_integrated_main += error_main*delta;
+
+        tail_control = error_tail* p_gain_tail + error_integrated_tail*i_gain_tail;
         main_control = error_main* p_gain_main + error_integrated_main*i_gain_main;
 
-        setPWM(0,  control_tail);
+        setPWM(0,  tail_control);
         setPWM(1,  main_control);
     }
 }

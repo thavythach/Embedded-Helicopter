@@ -42,10 +42,7 @@ enum butStates {RELEASED = 0, PUSHED, NO_CHANGE};
 #define RIGHT_BUT_PIN  GPIO_PIN_0
 #define RIGHT_BUT_NORMAL  true
 // RESET BUTTON
-#define RESET_PERIPH SYSCTL_PERIPH_GPIOA
-#define RESET_BASE GPIO_PORTA_BASE
-#define RESET_PIN GPIO_PIN_6
-#define RESET_BUT_NORMAL  true // make it similar to right and left as much as possible question mark?
+//#define RESET_BUT_NORMAL  true // make it similar to right and left as much as possible question mark?
 
 
 #define NUM_BUT_POLLS 4

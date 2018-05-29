@@ -26,6 +26,7 @@ heliYAW.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/_defs.h
 heliYAW.obj: E:/lab_a03_group_2/Milestones/Milestone/circBufT.h
 heliYAW.obj: E:/lab_a03_group_2/Milestones/Milestone/OrbitOLED/OrbitOLEDInterface.h
 heliYAW.obj: E:/lab_a03_group_2/Dependencies/buttons4.h
+heliYAW.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/math.h
 
 E:/lab_a03_group_2/HeliSource/heliYAW.c: 
 E:/lab_a03_group_2/Milestones/Milestone/Helicopter.h: 
@@ -53,3 +54,4 @@ C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/_defs.h:
 E:/lab_a03_group_2/Milestones/Milestone/circBufT.h: 
 E:/lab_a03_group_2/Milestones/Milestone/OrbitOLED/OrbitOLEDInterface.h: 
 E:/lab_a03_group_2/Dependencies/buttons4.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/math.h: 
