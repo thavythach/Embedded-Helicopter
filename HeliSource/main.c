@@ -49,7 +49,7 @@ int main(void){
         // controls the user input when flight mode equals flying.
         if ( getSW1mode() == FLYING){
             if (once) {
-             //   initializeRef();
+                initializeRef();
                 once = 0;
             }
 

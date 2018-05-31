@@ -1,7 +1,7 @@
 # FIXED
 
-heliPID.obj: E:/lab_a03_group_2/HeliSource/heliPID.c
-heliPID.obj: E:/lab_a03_group_2/Milestones/Milestone/Helicopter.h
+heliPID.obj: D:/lab_a03_group_2/HeliSource/heliPID.c
+heliPID.obj: D:/lab_a03_group_2/Milestones/Milestone/Helicopter.h
 heliPID.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdint.h
 heliPID.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdbool.h
 heliPID.obj: C:/ti/TivaWare_C_Series-2.1.4.178/inc/hw_memmap.h
@@ -23,12 +23,12 @@ heliPID.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h
 heliPID.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h
 heliPID.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/math.h
 heliPID.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/_defs.h
-heliPID.obj: E:/lab_a03_group_2/Milestones/Milestone/circBufT.h
-heliPID.obj: E:/lab_a03_group_2/Milestones/Milestone/OrbitOLED/OrbitOLEDInterface.h
-heliPID.obj: E:/lab_a03_group_2/Dependencies/buttons4.h
+heliPID.obj: D:/lab_a03_group_2/Milestones/Milestone/circBufT.h
+heliPID.obj: D:/lab_a03_group_2/Milestones/Milestone/OrbitOLED/OrbitOLEDInterface.h
+heliPID.obj: D:/lab_a03_group_2/Dependencies/buttons4.h
 
-E:/lab_a03_group_2/HeliSource/heliPID.c: 
-E:/lab_a03_group_2/Milestones/Milestone/Helicopter.h: 
+D:/lab_a03_group_2/HeliSource/heliPID.c: 
+D:/lab_a03_group_2/Milestones/Milestone/Helicopter.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdint.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdbool.h: 
 C:/ti/TivaWare_C_Series-2.1.4.178/inc/hw_memmap.h: 
@@ -50,6 +50,6 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h:
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/math.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/_defs.h: 
-E:/lab_a03_group_2/Milestones/Milestone/circBufT.h: 
-E:/lab_a03_group_2/Milestones/Milestone/OrbitOLED/OrbitOLEDInterface.h: 
-E:/lab_a03_group_2/Dependencies/buttons4.h: 
+D:/lab_a03_group_2/Milestones/Milestone/circBufT.h: 
+D:/lab_a03_group_2/Milestones/Milestone/OrbitOLED/OrbitOLEDInterface.h: 
+D:/lab_a03_group_2/Dependencies/buttons4.h: 

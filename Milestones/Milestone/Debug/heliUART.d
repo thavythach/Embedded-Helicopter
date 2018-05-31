@@ -25,7 +25,7 @@ heliUART.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/math.h
 heliUART.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/_defs.h
 heliUART.obj: ../circBufT.h
 heliUART.obj: ../OrbitOLED/OrbitOLEDInterface.h
-heliUART.obj: E:/lab_a03_group_2/Dependencies/buttons4.h
+heliUART.obj: D:/lab_a03_group_2/Dependencies/buttons4.h
 
 ../heliUART.c: 
 ../Helicopter.h: 
@@ -52,4 +52,4 @@ C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/math.h:
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/_defs.h: 
 ../circBufT.h: 
 ../OrbitOLED/OrbitOLEDInterface.h: 
-E:/lab_a03_group_2/Dependencies/buttons4.h: 
+D:/lab_a03_group_2/Dependencies/buttons4.h: 

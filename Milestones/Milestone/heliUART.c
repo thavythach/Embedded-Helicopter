@@ -65,10 +65,14 @@ void UART() {
 
        slowTick = false;
 
-       usnprintf (string, sizeof(string), "\nYaw = %4d\n\r", yawDegreeConvert(yaw));
+    //   usnprintf (string, sizeof(string), "\nYaw = %4d\n\r", yawDegreeConvert(yaw));
+    //   UARTSend (string);
+
+
+       usnprintf (string, sizeof(string), "\nDC m[%3d]t[%3d]\n\r", main_duty, tail_duty);
        UARTSend (string);
 
-       usnprintf (string, sizeof(string), "SP Yaw = %4d\n\r", getYawDegreesSetPoint());
+       usnprintf (string, sizeof(string), "SP Y=%4d[%4d]\n\r", getYawDegreesSetPoint(), yawDegreeConvert(yaw));
        UARTSend (string);
 
        usnprintf (string, sizeof(string), "Alt = %3d\n\r", altitude);

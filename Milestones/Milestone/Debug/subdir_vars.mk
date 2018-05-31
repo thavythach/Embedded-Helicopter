@@ -11,14 +11,14 @@ CMD_SRCS += \
 C_SRCS += \
 ../ButtonControl.c \
 ../Helicopter.c \
-E:/lab_a03_group_2/Dependencies/buttons4.c \
+D:/lab_a03_group_2/Dependencies/buttons4.c \
 ../circBufT.c \
-E:/lab_a03_group_2/HeliSource/heliADC.c \
-E:/lab_a03_group_2/HeliSource/heliPID.c \
-E:/lab_a03_group_2/HeliSource/heliPWM.c \
+D:/lab_a03_group_2/HeliSource/heliADC.c \
+D:/lab_a03_group_2/HeliSource/heliPID.c \
+D:/lab_a03_group_2/HeliSource/heliPWM.c \
 ../heliUART.c \
-E:/lab_a03_group_2/HeliSource/heliYAW.c \
-E:/lab_a03_group_2/HeliSource/main.c \
+D:/lab_a03_group_2/HeliSource/heliYAW.c \
+D:/lab_a03_group_2/HeliSource/main.c \
 ../tm4c123gh6pm_startup_ccs.c \
 C:/ti/TivaWare_C_Series-2.1.4.178/utils/ustdlib.c 
 
@@ -81,14 +81,14 @@ C_DEPS__QUOTED += \
 C_SRCS__QUOTED += \
 "../ButtonControl.c" \
 "../Helicopter.c" \
-"E:/lab_a03_group_2/Dependencies/buttons4.c" \
+"D:/lab_a03_group_2/Dependencies/buttons4.c" \
 "../circBufT.c" \
-"E:/lab_a03_group_2/HeliSource/heliADC.c" \
-"E:/lab_a03_group_2/HeliSource/heliPID.c" \
-"E:/lab_a03_group_2/HeliSource/heliPWM.c" \
+"D:/lab_a03_group_2/HeliSource/heliADC.c" \
+"D:/lab_a03_group_2/HeliSource/heliPID.c" \
+"D:/lab_a03_group_2/HeliSource/heliPWM.c" \
 "../heliUART.c" \
-"E:/lab_a03_group_2/HeliSource/heliYAW.c" \
-"E:/lab_a03_group_2/HeliSource/main.c" \
+"D:/lab_a03_group_2/HeliSource/heliYAW.c" \
+"D:/lab_a03_group_2/HeliSource/main.c" \
 "../tm4c123gh6pm_startup_ccs.c" \
 "C:/ti/TivaWare_C_Series-2.1.4.178/utils/ustdlib.c" 
 
