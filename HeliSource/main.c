@@ -1,4 +1,4 @@
-/**
+T/**
  * @desc Helicopter Rig Control Project for ENCE361 Embedded Systems I
  * @author0 Jed McDermott
  * @author1 Thavy Thach
@@ -40,8 +40,7 @@ int main(void){
                 isHeightInitialized = 1;
                 once = 1;
             }
-
-        }
+        }a
 
         // Does: calculation of altitude & displays screen (OLED).
         displayMeanVal ((2 * sum + BUF_SIZE) / 2 / BUF_SIZE, initMeanVal);
