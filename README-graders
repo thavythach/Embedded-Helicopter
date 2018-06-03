@@ -10,6 +10,8 @@ Gabriel Lake
 
 Project files and layout:
 
+Grading: on Git lab, ence361-2018/lab_A03_group_2/for-grading
+
 The dependencies folder contains resources used by the source code,
 including the Orbit OLED library folder (OrbitOLED) and a standard library (ustdlib.c). These
 were not modified and are not intended for grading, but they are included because they are 
@@ -27,5 +29,4 @@ robin architecture in main.c, in addition to interrupt driven tasks, found in He
 
 Thank you to the ENCE 361 course coordinators, instructors, teaching assistants, and developers who
 helped organize this project. 
-
 
