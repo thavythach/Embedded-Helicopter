@@ -30,3 +30,5 @@ robin architecture in main.c, in addition to interrupt driven tasks, found in He
 Thank you to the ENCE 361 course coordinators, instructors, teaching assistants, and developers who
 helped organize this project. 
 
+Demo:
+![Demo](https://github.com/thavythach/Embedded-Helicopter/blob/master/helicopter.gif?raw=true)
